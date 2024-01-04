@@ -49,7 +49,7 @@ public class Main extends LinearOpMode {
         // Rear Wheels Left/Right
         LeftWheel.setPower(gamepad1.left_stick_x);
         RightWheel.setPower(gamepad1.left_stick_x);
-        // Sideways Wheel Left/Right
+        // Pixel Scooper
         PixelScooper.setPower(gamepad1.right_stick_y * -1);
         // Broom Spinner
         if (gamepad1.b) {
@@ -82,9 +82,10 @@ public class Main extends LinearOpMode {
             RampEngager.setPosition(0);
           }
         }
-        /*if (gamepad1.a || gamepad1.y) {
+        // Wrong Buttons
+        if (gamepad1.left_stick_button || gamepad1.right_stick_button) {
           androidSoundPool.play("RawRes:ss_alarm");
-        }*/
+        }
       }
     }
     
