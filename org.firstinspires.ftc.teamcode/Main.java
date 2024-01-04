@@ -50,7 +50,7 @@ public class Main extends LinearOpMode {
         LeftWheel.setPower(gamepad1.left_stick_x);
         RightWheel.setPower(gamepad1.left_stick_x);
         // Sideways Wheel Left/Right
-        SidewaysWheel.setPower(gamepad1.right_stick_x);
+        PixelScooper.setPower(gamepad1.right_stick_y * -1);
         // Broom Spinner
         if (gamepad1.b) {
           BroomSpinner.setPower(0.3);
@@ -59,8 +59,6 @@ public class Main extends LinearOpMode {
         } else {
           BroomSpinner.setPower(0);
         }
-        // Pixel Scooper
-        PixelScooper.setPower();
         // Conveyor Belt
         if (gamepad1.y) {
           ConveyorBelt.setPower(-6);
@@ -74,8 +72,8 @@ public class Main extends LinearOpMode {
           AirplaneLauncher.setPosition(0);
         }
         // Ramp Engager
-        /*boolean RampEngaged = false;
-        if (gamepad1.a) {
+        boolean RampEngaged = false;
+        if (gamepad1.dpad_left) {
           if (RampEngaged == false) {
             RampEngaged = true;
             RampEngager.setPosition(0.5);
@@ -83,7 +81,7 @@ public class Main extends LinearOpMode {
             RampEngaged = false;
             RampEngager.setPosition(0);
           }
-        }*/
+        }
         /*if (gamepad1.a || gamepad1.y) {
           androidSoundPool.play("RawRes:ss_alarm");
         }*/
