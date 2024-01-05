@@ -10,28 +10,26 @@ import org.firstinspires.ftc.robotcore.external.android.AndroidSoundPool;
 @TeleOp(name = "Main")
 public class Main extends LinearOpMode {
 
-  //private DcMotor SidewaysWheel;
   private DcMotor LeftWheel;
   private DcMotor RightWheel;
+  //private DcMotor SidewaysWheel;
   private DcMotor BroomSpinner;
   private DcMotor PixelScooper;
   private DcMotor ConveyorBelt;
   private Servo AirplaneLauncher;
-  private Servo RampEngager;
   
   private AndroidSoundPool androidSoundPool;
 
   // On OpMode Activation
   @Override
   public void runOpMode() {
-    //SidewaysWheel = hardwareMap.get(DcMotor.class, "SidewaysWheel");
     LeftWheel = hardwareMap.get(DcMotor.class, "LeftWheel");
     RightWheel = hardwareMap.get(DcMotor.class, "RightWheel");
+    //SidewaysWheel = hardwareMap.get(DcMotor.class, "SidewaysWheel");
     BroomSpinner = hardwareMap.get(DcMotor.class, "BroomSpinner");
     PixelScooper = hardwareMap.get(DcMotor.class, "PixelScooper");
     ConveyorBelt = hardwareMap.get(DcMotor.class, "ConveyorBelt");
     AirplaneLauncher = hardwareMap.get(Servo.class, "AirplaneLauncher");
-    RampEngager = hardwareMap.get(Servo.class, "RampEngager");
     
     androidSoundPool = new AndroidSoundPool();
 
@@ -49,6 +47,8 @@ public class Main extends LinearOpMode {
         // Rear Wheels Left/Right
         LeftWheel.setPower(gamepad1.left_stick_x);
         RightWheel.setPower(gamepad1.left_stick_x);
+        // Sideways Wheel
+        //SidewaysWheel.setPower(gamepad1.right_stick_x);
         // Pixel Scooper
         PixelScooper.setPower(gamepad1.right_stick_y * -1);
         // Broom Spinner
@@ -56,34 +56,23 @@ public class Main extends LinearOpMode {
           BroomSpinner.setPower(0.3);
         } else if (gamepad1.x) {
           BroomSpinner.setPower(-0.3);
-        } else {
+        } else if (BroomSpinner.getPower() != 0) {
           BroomSpinner.setPower(0);
         }
         // Conveyor Belt
         if (gamepad1.y) {
-          ConveyorBelt.setPower(-6);
-        } else {
+          ConveyorBelt.setPower(-0.75);
+        } else if (ConveyorBelt.getPower() != 0) {
           ConveyorBelt.setPower(0);
         }
         // Airplane Launcher
         if (gamepad1.a) {
           AirplaneLauncher.setPosition(0.5);
-        } else {
+        } else if (AirplaneLauncher.getPosition() != 0) {
           AirplaneLauncher.setPosition(0);
         }
-        // Ramp Engager
-        boolean RampEngaged = false;
-        if (gamepad1.dpad_left) {
-          if (RampEngaged == false) {
-            RampEngaged = true;
-            RampEngager.setPosition(0.5);
-          } else if (RampEngaged == true) {
-            RampEngaged = false;
-            RampEngager.setPosition(0);
-          }
-        }
         // Wrong Buttons
-        if (gamepad1.left_stick_button || gamepad1.right_stick_button) {
+        if (gamepad1.left_stick_button || gamepad1.right_stick_button || gamepad1.guide || gamepad1.start || gamepad1.back) {
           androidSoundPool.play("RawRes:ss_alarm");
         }
       }
