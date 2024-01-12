@@ -11,7 +11,7 @@ public class Automonous extends LinearOpMode {
 
   private DcMotor LeftWheel;
   private DcMotor RightWheel;
-  //private DcMotor SidewaysWheel;
+  //private DcMotor SidewaysWheel; Rest well my sideways wheel.
   private DcMotor BroomSpinner;
   private DcMotor PixelScooper;
   private DcMotor ConveyorBelt;
