@@ -1,37 +1,39 @@
 package org.firstinspires.ftc.teamcode;
 
+import org.firstinspires.ftc.robotcore.external.android.AndroidSoundPool;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.ftccommon.SoundPlayer;
-import org.firstinspires.ftc.robotcore.external.android.AndroidSoundPool;
 
-@TeleOp(name = "Main")
-public class Main extends LinearOpMode {
+@TeleOp(name = "TeleOp")
+public class TeleOp extends LinearOpMode {
+
+  private AndroidSoundPool androidSoundPool;
 
   private DcMotor LeftWheel;
   private DcMotor RightWheel;
-  //private DcMotor SidewaysWheel; Rest well my sideways wheel.
+  private DcMotor SidewaysWheel;
   private DcMotor BroomSpinner;
   private DcMotor PixelScooper;
   private DcMotor ConveyorBelt;
   private Servo AirplaneLauncher;
-  
-  private AndroidSoundPool androidSoundPool;
 
   // On OpMode Activation
   @Override
   public void runOpMode() {
+
+    androidSoundPool = new AndroidSoundPool();
+
     LeftWheel = hardwareMap.get(DcMotor.class, "LeftWheel");
     RightWheel = hardwareMap.get(DcMotor.class, "RightWheel");
-    //SidewaysWheel = hardwareMap.get(DcMotor.class, "SidewaysWheel");
+    SidewaysWheel = hardwareMap.get(DcMotor.class, "SidewaysWheel");
     BroomSpinner = hardwareMap.get(DcMotor.class, "BroomSpinner");
     PixelScooper = hardwareMap.get(DcMotor.class, "PixelScooper");
     ConveyorBelt = hardwareMap.get(DcMotor.class, "ConveyorBelt");
     AirplaneLauncher = hardwareMap.get(Servo.class, "AirplaneLauncher");
-    
-    androidSoundPool = new AndroidSoundPool();
 
     // Initialization Code
     waitForStart();
@@ -48,7 +50,7 @@ public class Main extends LinearOpMode {
         LeftWheel.setPower(gamepad1.left_stick_x);
         RightWheel.setPower(gamepad1.left_stick_x);
         // Sideways Wheel
-        //SidewaysWheel.setPower(gamepad1.right_stick_x);
+        SidewaysWheel.setPower(gamepad1.right_stick_x);
         // Pixel Scooper
         PixelScooper.setPower(gamepad1.right_stick_y * -1);
         // Broom Spinner
@@ -73,11 +75,14 @@ public class Main extends LinearOpMode {
         }
         // Wrong Buttons
         if (gamepad1.left_stick_button || gamepad1.right_stick_button || gamepad1.guide || gamepad1.start || gamepad1.back) {
-          androidSoundPool.play("RawRes:ss_alarm");
+          if (!SoundPlayer.CurrentlyPlaying) {
+            androidSoundPool.play("RawRes:ss_alarm");
+          }
         }
       }
     }
     
     androidSoundPool.close();
+    
   }
 }
