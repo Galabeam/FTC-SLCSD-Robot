@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.ftccommon.SoundPlayer;
 
 @TeleOp(name = "TeleOp")
-public class TeleOp extends LinearOpMode {
+public class TeleOpMode extends LinearOpMode {
 
   private AndroidSoundPool androidSoundPool;
 
@@ -73,12 +73,12 @@ public class TeleOp extends LinearOpMode {
         } else if (AirplaneLauncher.getPosition() != 0) {
           AirplaneLauncher.setPosition(0);
         }
-        // Wrong Buttons
+        /* Wrong Buttons
         if (gamepad1.left_stick_button || gamepad1.right_stick_button || gamepad1.guide || gamepad1.start || gamepad1.back) {
           if (!SoundPlayer.CurrentlyPlaying) {
             androidSoundPool.play("RawRes:ss_alarm");
           }
-        }
+        }*/
       }
     }
     
