@@ -35,8 +35,13 @@ public class Automonous extends LinearOpMode {
     ConveyorBelt = hardwareMap.get(DcMotor.class, "ConveyorBelt");
     AirplaneLauncher = hardwareMap.get(Servo.class, "AirplaneLauncher");
 
+    // Hold
+    private void Hold(int Seconds) {
+      sleep(Seconds * 1000)
+    }
+
     // Rear Wheels
-    private void Rear(float Power, Direction) {
+    private void Rear(float Power, String Direction) {
       if (Direction == "t") {
         LeftWheel.setPower(Power);
         RightWheel.setPower(Power);
@@ -50,7 +55,7 @@ public class Automonous extends LinearOpMode {
       SidewaysWheel.setPower(-1 * Power);
     }
     // Broom Spinner
-    private void Broom(Direction) {
+    private void Broom(String Direction) {
       if (Direction == "f") {
         BroomSpinner.setPower(0.3);
       } else if (Direction == "b") {
@@ -67,17 +72,17 @@ public class Automonous extends LinearOpMode {
     if (opModeIsActive()) {
       // Run Code
       telemetry.update();
-      // Backward 0.8s
       Rear(-1,v);
-      sleep(1200);
-      // Turn Left 90deg
+      Hold(1.2);
+
       Rear(1,t);
-      sleep(640);
-      // Forward 0.8s
+      Hold(0.64);
+
       Rear(-1,v);
-      sleep(1700);
+      Hold(1.7);
+      
       Belt()
-      sleep(5000);
+      Hold(5);
     }
   }
 }
