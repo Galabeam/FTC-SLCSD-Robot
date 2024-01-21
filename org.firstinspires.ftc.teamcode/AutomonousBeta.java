@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import java.util.List;
 
-@Automonous(name = "Autonomous Beta")
+@Autonomous(name = "Autonomous Beta")
 public class AutomonousBeta extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
@@ -94,5 +94,4 @@ public class AutomonousBeta extends LinearOpMode {
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
         }
     }
-
 }

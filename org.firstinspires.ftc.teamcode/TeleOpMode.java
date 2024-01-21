@@ -1,17 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
-import org.firstinspires.ftc.robotcore.external.android.AndroidSoundPool;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.ftccommon.SoundPlayer;
 
 @TeleOp(name = "TeleOp")
 public class TeleOpMode extends LinearOpMode {
-
-  private AndroidSoundPool androidSoundPool;
 
   private DcMotor LeftWheel;
   private DcMotor RightWheel;
@@ -25,8 +20,6 @@ public class TeleOpMode extends LinearOpMode {
   @Override
   public void runOpMode() {
 
-    androidSoundPool = new AndroidSoundPool();
-
     LeftWheel = hardwareMap.get(DcMotor.class, "LeftWheel");
     RightWheel = hardwareMap.get(DcMotor.class, "RightWheel");
     SidewaysWheel = hardwareMap.get(DcMotor.class, "SidewaysWheel");
@@ -37,7 +30,6 @@ public class TeleOpMode extends LinearOpMode {
 
     // Initialization Code
     waitForStart();
-    androidSoundPool.initialize(SoundPlayer.getInstance());
     if (opModeIsActive()) {
       // Run Code
       while (opModeIsActive()) {
@@ -80,15 +72,7 @@ public class TeleOpMode extends LinearOpMode {
         } else if (AirplaneLauncher.getPosition() != 0) {
           AirplaneLauncher.setPosition(0);
         }
-
-        /* Wrong Buttons
-        if (gamepad1.left_stick_button || gamepad1.right_stick_button || gamepad1.guide || gamepad1.start || gamepad1.back) {
-          if (!SoundPlayer.CurrentlyPlaying) {
-            androidSoundPool.play("RawRes:ss_alarm");
-          }
-        }*/
       }
     }
-    androidSoundPool.close();
   }
 }

@@ -12,7 +12,7 @@ import com.qualcomm.ftccommon.SoundPlayer;
 public class Automonous extends LinearOpMode {
 
   private AndroidSoundPool androidSoundPool;
-
+  
   private DcMotor LeftWheel;
   private DcMotor RightWheel;
   private DcMotor SidewaysWheel;
@@ -34,12 +34,12 @@ public class Automonous extends LinearOpMode {
     PixelScooper = hardwareMap.get(DcMotor.class, "PixelScooper");
     ConveyorBelt = hardwareMap.get(DcMotor.class, "ConveyorBelt");
     AirplaneLauncher = hardwareMap.get(Servo.class, "AirplaneLauncher");
-
+    /*
     // Hold
     private void Hold(int Seconds) {
-      sleep(Seconds * 1000)
+      sleep(Seconds * 1000);
     }
-
+    
     // Rear Wheels
     private void Rear(float Power, String Direction) {
       if (Direction == "t") {
@@ -84,5 +84,6 @@ public class Automonous extends LinearOpMode {
       Belt()
       Hold(5);
     }
+    */
   }
 }
