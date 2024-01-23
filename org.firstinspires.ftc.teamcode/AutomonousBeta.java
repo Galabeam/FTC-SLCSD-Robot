@@ -36,16 +36,14 @@ public class AutomonousBeta extends LinearOpMode {
     private AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
 
     // How close camera should get to target (inches)
-    final double DESIRED_DISTANCE = 12.0;
+    final double DESIRED_DISTANCE = 6.0;
     //  Set the GAIN constants to control the relationship between the measured position error, and how much power is
     //  applied to the drive motors to correct the error.
     //  Drive = Error * Gain    Make these values smaller for smoother control, or larger for a more aggressive response.
     final double SPEED_GAIN  =  0.02  ;   //  Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
-    final double STRAFE_GAIN =  0.015 ;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
     final double TURN_GAIN   =  0.01  ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
 
     final double MAX_AUTO_SPEED = 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
-    final double MAX_AUTO_STRAFE= 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
     final double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
 
     private DcMotor LeftWheel; // leftback_drive
@@ -60,10 +58,9 @@ public class AutomonousBeta extends LinearOpMode {
     public void runOpMode() {
         boolean targetFound = false;    // Set to true when an AprilTag target is detected
         double  drive = 0;        // Desired forward power/speed (-1 to +1)
-        double  strafe = 0;        // Desired strafe power/speed (-1 to +1)
         double  turn = 0;        // Desired turning power/speed (-1 to +1)
         // TFOD & AprilTag Initiation
-        init();
+        initProcessors();
         // Hardware
         LeftWheel = hardwareMap.get(DcMotor.class, "LeftWheel");
         RightWheel = hardwareMap.get(DcMotor.class, "RightWheel");
@@ -73,7 +70,8 @@ public class AutomonousBeta extends LinearOpMode {
         ConveyorBelt = hardwareMap.get(DcMotor.class, "ConveyorBelt");
         AirplaneLauncher = hardwareMap.get(Servo.class, "AirplaneLauncher");
 
-        LeftWheel.setDirection(DcMotor.Direction.REVERSE);
+        //LeftWheel.setDirection(DcMotor.Direction.REVERSE);
+        RightWheel.setDirection(DcMotor.Direction.REVERSE);
         PixelScooper.setDirection(DcMotor.Direction.REVERSE);
 
         if (USE_WEBCAM) {
@@ -81,7 +79,7 @@ public class AutomonousBeta extends LinearOpMode {
         }
 
         // Wait for the DS start button to be touched.
-        telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
+        telemetry.addData("Camera preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
         waitForStart();
@@ -116,12 +114,17 @@ public class AutomonousBeta extends LinearOpMode {
                     // Use the speed and turn "gains" to calculate how we want the robot to move.
                     drive  = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
                     turn   = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
-                    telemetry.addData("Auto","Drive %5.2f, Strafe %5.2f, Turn %5.2f ", drive, turn);
+                    telemetry.addData("Found","ID %d (%s)", desiredTag.id, desiredTag.metadata.name);
+                    telemetry.addData("Range","%5.1f inches", desiredTag.ftcPose.range);
+                    telemetry.addData("Bearing","%3.0f inches", desiredTag.ftcPose.bearing);
+                } else {
+                    drive = 0;
+                    turn = 0;
                 }
                 // TFOD & AprilTag Telemetry
                 telemetry();
-                // Push telemetry to the Driver Station.
-                telemetry.update();
+                // Push telemetry to the Driver Hub.
+                //telemetry.update();
                 // Save CPU resources; can resume streaming when needed.
                 if (gamepad1.dpad_down) {
                     visionPortal.stopStreaming();
@@ -129,125 +132,125 @@ public class AutomonousBeta extends LinearOpMode {
                     visionPortal.resumeStreaming();
                 }
                 // Apply desired axes motions to the drivetrain.
-                moveRobot(drive, strafe, turn);
+                moveRobot(drive, turn);
                 sleep(10);
             }
         }
-        public void moveRobot(double x, double y, double yaw) {
-            // Calculate wheel powers.
-            double leftPower =  x - yaw;
-            double rightPower =  x + yaw;
-            // Normalize wheel powers to be less than 1.0
-            double max = Math.max(Math.abs(leftPower), Math.abs(rightPower));
-            if (max > 1.0) {
-                leftPower /= max;
-                rightPower /= max;
-            }
-            // Send powers to the wheels.
-            LeftWheel.setPower(leftPower);
-            RightWheel.setPower(rightPower);
+    }
+    public void moveRobot(double x, double yaw) {
+        // Calculate wheel powers.
+        double leftPower =  x - yaw;
+        double rightPower =  x + yaw;
+        // Normalize wheel powers to be less than 1.0
+        double max = Math.max(Math.abs(leftPower), Math.abs(rightPower));
+        if (max > 1.0) {
+            leftPower /= max;
+            rightPower /= max;
         }
-        private void init() {
-            // TFOD
-            tfod = new TfodProcessor.Builder().build();
-            // Set confidence threshold for TFOD recognitions, at any time.
-            tfod.setMinResultConfidence(0.75f);
+        // Send powers to the wheels.
+        LeftWheel.setPower(leftPower);
+        RightWheel.setPower(rightPower);
+    }
+    private void initProcessors() {
+        // TFOD
+        tfod = new TfodProcessor.Builder().build();
+        // Set confidence threshold for TFOD recognitions, at any time.
+        tfod.setMinResultConfidence(0.75f);
 
-            // AprilTag
-            aprilTag = new AprilTagProcessor.Builder().build();
-            //.setDrawAxes(false)
-            //.setDrawCubeProjection(false)
-            //.setDrawTagOutline(true)
-            //.setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
-            //.setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
-            //.setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
-            aprilTag.setDecimation(2);
+        // AprilTag
+        aprilTag = new AprilTagProcessor.Builder().build();
+        //.setDrawAxes(false)
+        //.setDrawCubeProjection(false)
+        //.setDrawTagOutline(true)
+        //.setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+        //.setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
+        //.setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
+        aprilTag.setDecimation(2);
 
-            // VisionPortal
-            VisionPortal.Builder builder = new VisionPortal.Builder();
-            //visionPortal.setProcessorEnabled(tfod, true);
-            // Set the camera (webcam vs. built-in RC phone camera).
-            if (USE_WEBCAM) {
-                builder.setCamera(hardwareMap.get(WebcamName.class, "Camera"));
+        // VisionPortal
+        VisionPortal.Builder builder = new VisionPortal.Builder();
+        //visionPortal.setProcessorEnabled(tfod, true);
+        // Set the camera (webcam vs. built-in RC phone camera).
+        if (USE_WEBCAM) {
+            builder.setCamera(hardwareMap.get(WebcamName.class, "Camera"));
+        } else {
+            builder.setCamera(BuiltinCameraDirection.BACK);
+        }
+        //builder.setCameraResolution(new Size(640, 480));
+        // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
+        builder.enableLiveView(true);
+        // Set the stream format; MJPEG uses less bandwidth than default YUY2.
+        builder.setStreamFormat(VisionPortal.StreamFormat.MJPEG);
+        // Choose whether or not LiveView stops if no processors are enabled.
+        // If set "true", monitor shows solid orange screen if no processors enabled.
+        // If set "false", monitor shows camera view without annotations.
+        builder.setAutoStopLiveView(true);
+        // Set and enable the processor.
+        builder.addProcessor(tfod);
+        builder.addProcessor(aprilTag);
+        visionPortal = builder.build();
+    }
+    private void telemetry() {
+        // TFOD
+        List<Recognition> currentRecognitions = tfod.getRecognitions();
+        telemetry.addData("# Objects Detected", currentRecognitions.size());
+        // Step through the list of recognitions and display info for each one.
+        for (Recognition recognition : currentRecognitions) {
+            double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
+            double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
+            telemetry.addData(""," ");
+            telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
+            telemetry.addData("- Position", "%.0f / %.0f", x, y);
+            telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
+        }
+
+        // AprilTag
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        telemetry.addData("# AprilTags Detected", currentDetections.size());
+        // Step through the list of detections and display info for each one.
+        for (AprilTagDetection detection : currentDetections) {
+            if (detection.metadata != null) {
+                telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
+                telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
+                telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
+                telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
             } else {
-                builder.setCamera(BuiltinCameraDirection.BACK);
+                telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
+                telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
             }
-            //builder.setCameraResolution(new Size(640, 480));
-            // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
-            builder.enableLiveView(true);
-            // Set the stream format; MJPEG uses less bandwidth than default YUY2.
-            builder.setStreamFormat(VisionPortal.StreamFormat.MJPEG);
-            // Choose whether or not LiveView stops if no processors are enabled.
-            // If set "true", monitor shows solid orange screen if no processors enabled.
-            // If set "false", monitor shows camera view without annotations.
-            builder.setAutoStopLiveView(true);
-            // Set and enable the processor.
-            builder.addProcessor(tfod);
-            builder.addProcessor(aprilTag);
-            visionPortal = builder.build();
         }
-        private void telemetry() {
-            // TFOD
-            List<Recognition> currentRecognitions = tfod.getRecognitions();
-            telemetry.addData("# Objects Detected", currentRecognitions.size());
-            // Step through the list of recognitions and display info for each one.
-            for (Recognition recognition : currentRecognitions) {
-                double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
-                double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
-                telemetry.addData(""," ");
-                telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
-                telemetry.addData("- Position", "%.0f / %.0f", x, y);
-                telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
-            }
-
-            // AprilTag
-            List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-            telemetry.addData("# AprilTags Detected", currentDetections.size());
-            // Step through the list of detections and display info for each one.
-            for (AprilTagDetection detection : currentDetections) {
-                if (detection.metadata != null) {
-                    telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
-                    telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
-                    telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
-                    telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
-                } else {
-                    telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
-                    telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
-                }
-            }
-            // Add "key" information to telemetry
-            telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
-            telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
-            telemetry.addLine("RBE = Range, Bearing & Elevation");
+        // Add "key" information to telemetry
+        telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
+        telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
+        telemetry.addLine("RBE = Range, Bearing & Elevation");
+    }
+    private void setManualExposure(int exposureMS, int gain) {
+        // Wait for the camera to be open, then use the controls
+        if (visionPortal == null) {
+            return;
         }
-        private void setManualExposure(int exposureMS, int gain) {
-            // Wait for the camera to be open, then use the controls
-            if (visionPortal == null) {
-                return;
-            }
-            // Make sure camera is streaming before we try to set the exposure controls
-            if (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
-                telemetry.addData("Camera", "Waiting");
-                telemetry.update();
-                while (!isStopRequested() && (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING)) {
-                    sleep(20);
-                }
-                telemetry.addData("Camera", "Ready");
-                telemetry.update();
-            }
-            // Set camera controls unless we are stopping.
-            if (!isStopRequested()) {
-                ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-                if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
-                    exposureControl.setMode(ExposureControl.Mode.Manual);
-                    sleep(50);
-                }
-                exposureControl.setExposure((long)exposureMS, TimeUnit.MILLISECONDS);
-                sleep(20);
-                GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
-                gainControl.setGain(gain);
+        // Make sure camera is streaming before we try to set the exposure controls
+        if (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
+            telemetry.addData("Camera", "Waiting");
+            telemetry.update();
+            while (!isStopRequested() && (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING)) {
                 sleep(20);
             }
+            telemetry.addData("Camera", "Ready");
+            telemetry.update();
+        }
+        // Set camera controls unless we are stopping.
+        if (!isStopRequested()) {
+            ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+            if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
+                exposureControl.setMode(ExposureControl.Mode.Manual);
+                sleep(50);
+            }
+            exposureControl.setExposure((long)exposureMS, TimeUnit.MILLISECONDS);
+            sleep(20);
+            GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
+            gainControl.setGain(gain);
+            sleep(20);
         }
     }
 }
