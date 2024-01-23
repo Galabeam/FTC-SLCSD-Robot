@@ -59,8 +59,9 @@ public class AutomonousBeta extends LinearOpMode {
         boolean targetFound = false;    // Set to true when an AprilTag target is detected
         double  drive = 0;        // Desired forward power/speed (-1 to +1)
         double  turn = 0;        // Desired turning power/speed (-1 to +1)
-        // TFOD & AprilTag Initiation
-        initProcessors();
+        // VisionPortal Initiation (TFOD/AprilTag)
+        initVisionPortal();
+        setManualExposure(30, TimeUnit.MILLISECONDS);
         // Hardware
         LeftWheel = hardwareMap.get(DcMotor.class, "LeftWheel");
         RightWheel = hardwareMap.get(DcMotor.class, "RightWheel");
@@ -69,14 +70,11 @@ public class AutomonousBeta extends LinearOpMode {
         PixelScooper = hardwareMap.get(DcMotor.class, "PixelScooper");
         ConveyorBelt = hardwareMap.get(DcMotor.class, "ConveyorBelt");
         AirplaneLauncher = hardwareMap.get(Servo.class, "AirplaneLauncher");
+        Camera = hardwareMap.get(WebcamName.class, "Camera");
 
         //LeftWheel.setDirection(DcMotor.Direction.REVERSE);
         RightWheel.setDirection(DcMotor.Direction.REVERSE);
         PixelScooper.setDirection(DcMotor.Direction.REVERSE);
-
-        if (USE_WEBCAM) {
-            setManualExposure(6, 250);
-        }
 
         // Wait for the DS start button to be touched.
         telemetry.addData("Camera preview on/off", "3 dots, Camera Stream");
@@ -121,18 +119,18 @@ public class AutomonousBeta extends LinearOpMode {
                     drive = 0;
                     turn = 0;
                 }
-                // TFOD & AprilTag Telemetry
-                telemetry();
-                // Push telemetry to the Driver Hub.
-                //telemetry.update();
                 // Save CPU resources; can resume streaming when needed.
                 if (gamepad1.dpad_down) {
                     visionPortal.stopStreaming();
                 } else if (gamepad1.dpad_up) {
                     visionPortal.resumeStreaming();
                 }
+                // Telemetry
+                visionPortalTelemetry();
+                telemetry.update();
                 // Apply desired axes motions to the drivetrain.
                 moveRobot(drive, turn);
+                // Prevent explosions
                 sleep(10);
             }
         }
@@ -151,7 +149,7 @@ public class AutomonousBeta extends LinearOpMode {
         LeftWheel.setPower(leftPower);
         RightWheel.setPower(rightPower);
     }
-    private void initProcessors() {
+    private void initVisionPortal() {
         // TFOD
         tfod = new TfodProcessor.Builder().build();
         // Set confidence threshold for TFOD recognitions, at any time.
@@ -169,28 +167,24 @@ public class AutomonousBeta extends LinearOpMode {
 
         // VisionPortal
         VisionPortal.Builder builder = new VisionPortal.Builder();
-        //visionPortal.setProcessorEnabled(tfod, true);
-        // Set the camera (webcam vs. built-in RC phone camera).
-        if (USE_WEBCAM) {
-            builder.setCamera(hardwareMap.get(WebcamName.class, "Camera"));
-        } else {
-            builder.setCamera(BuiltinCameraDirection.BACK);
-        }
-        //builder.setCameraResolution(new Size(640, 480));
-        // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
+        // Set the camera
+        builder.setCamera(Camera);
+        builder.setCameraResolution(new Size(1920, 1080));
+        // Enable the RC preview (LiveView).
+        // false - to omit camera monitoring.
         builder.enableLiveView(true);
         // Set the stream format; MJPEG uses less bandwidth than default YUY2.
         builder.setStreamFormat(VisionPortal.StreamFormat.MJPEG);
-        // Choose whether or not LiveView stops if no processors are enabled.
-        // If set "true", monitor shows solid orange screen if no processors enabled.
-        // If set "false", monitor shows camera view without annotations.
+        // Choose whether LiveView stops if no processors enabled
+        // true - monitor shows solid orange screen if no processors enabled
+        // false - monitor shows camera view without annotations
         builder.setAutoStopLiveView(true);
-        // Set and enable the processor.
+        // Add processors
         builder.addProcessor(tfod);
         builder.addProcessor(aprilTag);
         visionPortal = builder.build();
     }
-    private void telemetry() {
+    private void visionPortalTelemetry() {
         // TFOD
         List<Recognition> currentRecognitions = tfod.getRecognitions();
         telemetry.addData("# Objects Detected", currentRecognitions.size());
@@ -206,7 +200,7 @@ public class AutomonousBeta extends LinearOpMode {
 
         // AprilTag
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-        telemetry.addData("# AprilTags Detected", currentDetections.size());
+        telemetry.addData("# I found AprilTag(s) :D", currentDetections.size());
         // Step through the list of detections and display info for each one.
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null) {
@@ -219,7 +213,6 @@ public class AutomonousBeta extends LinearOpMode {
                 telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
             }
         }
-        // Add "key" information to telemetry
         telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
         telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
         telemetry.addLine("RBE = Range, Bearing & Elevation");
@@ -231,12 +224,12 @@ public class AutomonousBeta extends LinearOpMode {
         }
         // Make sure camera is streaming before we try to set the exposure controls
         if (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
-            telemetry.addData("Camera", "Waiting");
+            telemetry.addData("mister camera", "I'm trying to find it");
             telemetry.update();
             while (!isStopRequested() && (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING)) {
                 sleep(20);
             }
-            telemetry.addData("Camera", "Ready");
+            telemetry.addData("mister camera", "it's here");
             telemetry.update();
         }
         // Set camera controls unless we are stopping.
