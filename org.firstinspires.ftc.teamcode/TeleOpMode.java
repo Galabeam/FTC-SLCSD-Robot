@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "TeleOp")
 public class TeleOpMode extends LinearOpMode {
@@ -28,6 +30,9 @@ public class TeleOpMode extends LinearOpMode {
     ConveyorBelt = hardwareMap.get(DcMotor.class, "ConveyorBelt");
     AirplaneLauncher = hardwareMap.get(Servo.class, "AirplaneLauncher");
 
+    LeftWheel.setDirection(DcMotor.Direction.REVERSE);
+    PixelScooper.setDirection(DcMotor.Direction.REVERSE);
+
     // Initialization Code
     waitForStart();
     if (opModeIsActive()) {
@@ -37,7 +42,7 @@ public class TeleOpMode extends LinearOpMode {
         telemetry.update();
         
         // Rear Wheels Forward/Backward
-        LeftWheel.setPower(gamepad1.left_stick_y * -1);
+        LeftWheel.setPower(gamepad1.left_stick_y);
         RightWheel.setPower(gamepad1.left_stick_y);
 
         // Rear Wheels Left/Right
@@ -48,7 +53,7 @@ public class TeleOpMode extends LinearOpMode {
         SidewaysWheel.setPower(gamepad1.right_stick_x);
 
         // Pixel Scooper
-        PixelScooper.setPower(gamepad1.right_stick_y * -1);
+        PixelScooper.setPower(gamepad1.right_stick_y);
 
         // Broom Spinner
         if (gamepad1.b) {
@@ -71,6 +76,16 @@ public class TeleOpMode extends LinearOpMode {
           AirplaneLauncher.setPosition(0.5);
         } else if (AirplaneLauncher.getPosition() != 0) {
           AirplaneLauncher.setPosition(0);
+        }
+
+        // Wrong Buttons        
+        if (!gamepad1.a 
+        || !gamepad1.y 
+        || !gamepad1.b 
+        || !gamepad1.x 
+        || !gamepad1.left_stick 
+        || !gamepad1.right_stick) {
+          gamepad1.rumble(0.8,0.8,200);
         }
       }
     }
