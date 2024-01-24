@@ -102,12 +102,12 @@ public class Automonous extends LinearOpMode {
                             break; // don't look any further.
                         } else {
                             // This tag is in the library, but we do not want to track it right now.
-                            telemetry.addData("Skipping", "Tag ID %d is not desired", detection.id);
+                            telemetry.addData("skipping", "Tag ID %d is not desired", detection.id);
                         }
                     } else {
                         // This tag is NOT in the library, so we don't have enough information to track
                         // to it.
-                        telemetry.addData("Unknown", "Tag ID %d is not in TagLibrary", detection.id);
+                        telemetry.addData("don kno", "Tag ID %d is not in TagLibrary", detection.id);
                     }
                 }
                 if (targetFound) {
@@ -209,7 +209,7 @@ public class Automonous extends LinearOpMode {
 
         // AprilTag
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-        telemetry.addData("# I found AprilTag(s) :D", currentDetections.size());
+        telemetry.addData("I found # AprilTag(s) :D", currentDetections.size());
         // Step through the list of detections and display info for each one.
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null) {
