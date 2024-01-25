@@ -42,18 +42,26 @@ public class TeleOpMode extends LinearOpMode {
 				telemetry.update();
 
 				// Rear Wheels Forward/Backward
-				LeftWheel.setPower(gamepad1.left_stick_y);
-				RightWheel.setPower(gamepad1.left_stick_y);
+				if (gamepad1.left_stick_y > 0) {
+					LeftWheel.setPower(gamepad1.left_stick_y);
+					RightWheel.setPower(gamepad1.left_stick_y);
+				}
 
 				// Rear Wheels Left/Right
-				LeftWheel.setPower(gamepad1.left_stick_x);
-				RightWheel.setPower(gamepad1.left_stick_x);
+				if (gamepad1.left_stick_x > 0) {
+					LeftWheel.setPower(gamepad1.left_stick_x);
+					RightWheel.setPower(gamepad1.left_stick_x);
+				}
 
 				// Sideways Wheel
-				SidewaysWheel.setPower(gamepad1.right_stick_x);
+				if (gamepad1.right_stick_x > 0) {
+					SidewaysWheel.setPower(gamepad1.right_stick_x);
+				}
 
 				// Pixel Scooper
-				PixelScooper.setPower(gamepad1.right_stick_y);
+				if (gamepad1.right_stick_y > 0) {
+					PixelScooper.setPower(gamepad1.right_stick_y);
+				}
 
 				// Broom Spinner
 				if (gamepad1.b) {
@@ -79,12 +87,13 @@ public class TeleOpMode extends LinearOpMode {
 				}
 
 				// Wrong Buttons
-				if (!gamepad1.a
-						|| !gamepad1.y
-						|| !gamepad1.b
-						|| !gamepad1.x
-						|| !gamepad1.left_stick
-						|| !gamepad1.right_stick) {
+				if(
+					   !gamepad1.a
+					|| !gamepad1.y
+					|| !gamepad1.b
+					|| !gamepad1.x
+					|| !gamepad1.left_stick
+					|| !gamepad1.right_stick) {
 					gamepad1.rumble(0.8, 0.8, 200);
 				}
 			}

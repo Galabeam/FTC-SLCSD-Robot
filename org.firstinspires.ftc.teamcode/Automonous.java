@@ -42,13 +42,14 @@ public class Automonous extends LinearOpMode {
     // applied to the drive motors to correct the error.
     // Drive = Error * Gain Make these values smaller for smoother control, or
     // larger for a more aggressive response.
-    final double SPEED_GAIN = 0.02; // Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.
+    final double SPEED_GAIN = 0.05; // Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.
                                     // (0.50 / 25.0)
     final double TURN_GAIN = 0.01; // Turn Control "Gain". eg: Ramp up to 25% power at a 25 degree error. (0.25 /
                                    // 25.0)
 
-    final double MAX_AUTO_SPEED = 0.5; // Clip the approach speed to this max value (adjust for your robot)
-    final double MAX_AUTO_TURN = 0.3; // Clip the turn speed to this max value (adjust for your robot)
+    final double MAX_AUTO_SPEED = 1; // Clip the approach speed to this max value (adjust for your robot)
+    final double MAX_AUTO_TURN = 1]
+    ; // Clip the turn speed to this max value (adjust for your robot)
 
     private DcMotor LeftWheel; // leftback_drive
     private DcMotor RightWheel; // rightback_drive
@@ -57,15 +58,14 @@ public class Automonous extends LinearOpMode {
     private DcMotor PixelScooper;
     private DcMotor ConveyorBelt;
     private Servo AirplaneLauncher;
+    private WebcamName FrontCamera; // Mister
+    private WebcamName BackCamera; // Missus
 
     @Override
     public void runOpMode() {
         boolean targetFound = false; // Set to true when an AprilTag target is detected
         double drive = 0; // Desired forward power/speed (-1 to +1)
         double turn = 0; // Desired turning power/speed (-1 to +1)
-        // VisionPortal Initiation (TFOD/AprilTag)
-        initVisionPortal();
-        setManualExposure(30, TimeUnit.MILLISECONDS);
         // Hardware
         LeftWheel = hardwareMap.get(DcMotor.class, "LeftWheel");
         RightWheel = hardwareMap.get(DcMotor.class, "RightWheel");
@@ -74,15 +74,20 @@ public class Automonous extends LinearOpMode {
         PixelScooper = hardwareMap.get(DcMotor.class, "PixelScooper");
         ConveyorBelt = hardwareMap.get(DcMotor.class, "ConveyorBelt");
         AirplaneLauncher = hardwareMap.get(Servo.class, "AirplaneLauncher");
-        Camera = hardwareMap.get(WebcamName.class, "Camera");
+        FrontCamera = hardwareMap.get(WebcamName.class, "FrontCamera");
+        BackCamera = hardwareMap.get(WebcamName.class, "BackCamera");
+        // VisionPortal Initiation (TFOD/AprilTag)
+        initVisionPortal(FrontCamera);
+        initVisionPortal(BackCamera);
+        setManualExposure(1, 1);
 
         // LeftWheel.setDirection(DcMotor.Direction.REVERSE);
         RightWheel.setDirection(DcMotor.Direction.REVERSE);
         PixelScooper.setDirection(DcMotor.Direction.REVERSE);
 
         // Wait for the DS start button to be touched.
-        telemetry.addData("Camera preview on/off", "3 dots, Camera Stream");
-        telemetry.addData(">", "Touch Play to start OpMode");
+        telemetry.addData("mister & missus camera preview on/off", "3 dots, camera stream");
+        telemetry.addData(">", "touch play to start TeleOpMode");
         telemetry.update();
         waitForStart();
 
@@ -134,15 +139,25 @@ public class Automonous extends LinearOpMode {
                 // Telemetry
                 visionPortalTelemetry();
                 telemetry.update();
-                // Apply desired axes motions to the drivetrain.
-                moveRobot(drive, turn);
-                // Prevent explosions
+                // Move
+                private void int startingStage = 0;
+                if (drive != 0 && turn != 0) {
+                    move(drive, turn);
+                } else if (startingStage == 0) {
+                    move(1, 0);
+                    startingStage += 1;
+                }
+                // Prevent Explosions
                 sleep(10);
             }
         }
     }
+    // Functions
+    public void hold(int seconds) {
+        sleep((seconds * 1000))
+    }
 
-    public void moveRobot(double x, double yaw) {
+    public void move(double x, double yaw) {
         // Calculate wheel powers.
         double leftPower = x - yaw;
         double rightPower = x + yaw;
@@ -152,16 +167,15 @@ public class Automonous extends LinearOpMode {
             leftPower /= max;
             rightPower /= max;
         }
-        // Send powers to the wheels.
         LeftWheel.setPower(leftPower);
         RightWheel.setPower(rightPower);
     }
 
-    private void initVisionPortal() {
+    private void initVisionPortal(WebcamName Camera) {
         // TFOD
         tfod = new TfodProcessor.Builder().build();
         // Set confidence threshold for TFOD recognitions, at any time.
-        tfod.setMinResultConfidence(0.75f);
+        tfod.setMinResultConfidence(0.90f);
 
         // AprilTag
         aprilTag = new AprilTagProcessor.Builder().build();
@@ -177,7 +191,7 @@ public class Automonous extends LinearOpMode {
         VisionPortal.Builder builder = new VisionPortal.Builder();
         // Set the camera
         builder.setCamera(Camera);
-        builder.setCameraResolution(new Size(1920, 1080));
+        //builder.setCameraResolution(new Size(1920, 1080));
         // Enable the RC preview (LiveView).
         // false - to omit camera monitoring.
         builder.enableLiveView(true);
@@ -188,15 +202,14 @@ public class Automonous extends LinearOpMode {
         // false - monitor shows camera view without annotations
         builder.setAutoStopLiveView(true);
         // Add processors
-        builder.addProcessor(tfod);
-        builder.addProcessor(aprilTag);
+        builder.addProcessors(tfod, aprilTag);
         visionPortal = builder.build();
     }
 
     private void visionPortalTelemetry() {
         // TFOD
         List<Recognition> currentRecognitions = tfod.getRecognitions();
-        telemetry.addData("# Objects Detected", currentRecognitions.size());
+        telemetry.addData(String.format("I found %d Object(s) :D", currentRecognitions.size()));
         // Step through the list of recognitions and display info for each one.
         for (Recognition recognition : currentRecognitions) {
             double x = (recognition.getLeft() + recognition.getRight()) / 2;
@@ -209,7 +222,7 @@ public class Automonous extends LinearOpMode {
 
         // AprilTag
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-        telemetry.addData("I found # AprilTag(s) :D", currentDetections.size());
+        telemetry.addData(String.format("I found %d AprilTag(s) :D", currentDetections.size()));
         // Step through the list of detections and display info for each one.
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null) {
