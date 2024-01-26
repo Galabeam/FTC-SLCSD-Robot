@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
@@ -19,8 +20,10 @@ import com.qualcomm.robotcore.util.Range;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name = "Autonomous")
-public class Automonous extends LinearOpMode {
+import android.util.Size;
+
+@Autonomous(name = "Autonomous Beta")
+public class AutonomousModeBeta extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true; // true for webcam, false for phone camera
     private static final int DESIRED_TAG_ID = -1; // Choose the tag you want to approach or set to -1 for ANY tag.
@@ -30,10 +33,17 @@ public class Automonous extends LinearOpMode {
         "Pixel",
     };
 
-    private VisionPortal visionPortal;
-    private TfodProcessor tfod;
-    private AprilTagProcessor aprilTag;
-    private AprilTagDetection desiredTag = null; // Used to hold the data for a detected AprilTag
+    VisionPortal.Builder VisionPortalBuilder;
+    List portalsList;
+    int Portal1;
+    int Portal2;
+    TfodProcessor TfodProcessorFront;
+    TfodProcessor TfodProcessorBack;
+    AprilTagProcessor AprilTagProcessorFront;
+    AprilTagProcessor AprilTagProcessorBack;
+    AprilTagDetection desiredTag = null; // Used to hold the data for a detected AprilTag
+    VisionPortal VisionPortalFront;
+    VisionPortal VisionPortalBack;
 
     // How close camera should get to target (inches)
     final double DESIRED_DISTANCE = 6.0;
@@ -48,7 +58,7 @@ public class Automonous extends LinearOpMode {
                                    // 25.0)
 
     final double MAX_AUTO_SPEED = 1; // Clip the approach speed to this max value (adjust for your robot)
-    final double MAX_AUTO_TURN = 1]
+    final double MAX_AUTO_TURN = 1;
     ; // Clip the turn speed to this max value (adjust for your robot)
 
     private DcMotor LeftWheel; // leftback_drive
@@ -61,39 +71,48 @@ public class Automonous extends LinearOpMode {
     private WebcamName FrontCamera; // Mister
     private WebcamName BackCamera; // Missus
 
+    private void initMultiPortals() {
+        portalsList = JavaUtil.makeIntegerList(VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.HORIZONTAL));
+        Portal1 = ((Integer) JavaUtil.inListGet(portalsList, JavaUtil.AtMode.FROM_START, 0, false)).intValue();
+        Portal2 = ((Integer) JavaUtil.inListGet(portalsList, JavaUtil.AtMode.FROM_START, 1, false)).intValue(); 
+    }
+
     @Override
     public void runOpMode() {
         boolean targetFound = false; // Set to true when an AprilTag target is detected
         double drive = 0; // Desired forward power/speed (-1 to +1)
         double turn = 0; // Desired turning power/speed (-1 to +1)
         // Hardware
-        LeftWheel = hardwareMap.get(DcMotor.class, "LeftWheel");
+        /*LeftWheel = hardwareMap.get(DcMotor.class, "LeftWheel");
         RightWheel = hardwareMap.get(DcMotor.class, "RightWheel");
         SidewaysWheel = hardwareMap.get(DcMotor.class, "SidewaysWheel");
         BroomSpinner = hardwareMap.get(DcMotor.class, "BroomSpinner");
         PixelScooper = hardwareMap.get(DcMotor.class, "PixelScooper");
         ConveyorBelt = hardwareMap.get(DcMotor.class, "ConveyorBelt");
         AirplaneLauncher = hardwareMap.get(Servo.class, "AirplaneLauncher");
+        */
         FrontCamera = hardwareMap.get(WebcamName.class, "FrontCamera");
         BackCamera = hardwareMap.get(WebcamName.class, "BackCamera");
         // VisionPortal Initiation (TFOD/AprilTag)
-        initVisionPortal(FrontCamera);
-        initVisionPortal(BackCamera);
-        setManualExposure(1, 1);
+        initMultiPortals();
+        initProcessors();
+        setManualExposure(VisionPortalFront, 1, 1);
+        setManualExposure(VisionPortalBack, 1, 1);
 
         // LeftWheel.setDirection(DcMotor.Direction.REVERSE);
-        RightWheel.setDirection(DcMotor.Direction.REVERSE);
-        PixelScooper.setDirection(DcMotor.Direction.REVERSE);
+        //RightWheel.setDirection(DcMotor.Direction.REVERSE);
+        //PixelScooper.setDirection(DcMotor.Direction.REVERSE);
 
         // Wait for the DS start button to be touched.
         telemetry.addData("mister & missus camera preview on/off", "3 dots, camera stream");
         telemetry.addData(">", "touch play to start TeleOpMode");
-        telemetry.update();
+        //telemetry.update();
         waitForStart();
 
         if (opModeIsActive()) {
             while (opModeIsActive()) {
-                targetFound = false;
+                // AprilTag Runtime
+                /*targetFound = false;
                 desiredTag = null;
                 List<AprilTagDetection> currentDetections = aprilTag.getDetections();
                 for (AprilTagDetection detection : currentDetections) {
@@ -115,6 +134,8 @@ public class Automonous extends LinearOpMode {
                         telemetry.addData("don kno", "Tag ID %d is not in TagLibrary", detection.id);
                     }
                 }
+
+                boolean firstMove = false;
                 if (targetFound) {
                     // Determine heading, range and Yaw (tag image rotation) error so we can use
                     // them to control the robot automatically.
@@ -130,17 +151,10 @@ public class Automonous extends LinearOpMode {
                     drive = 0;
                     turn = 0;
                 }
-                // Save CPU resources; can resume streaming when needed.
-                if (gamepad1.dpad_down) {
-                    visionPortal.stopStreaming();
-                } else if (gamepad1.dpad_up) {
-                    visionPortal.resumeStreaming();
-                }
                 // Telemetry
                 visionPortalTelemetry();
                 telemetry.update();
                 // Move
-                private void bool firstMove = false;
                 if (drive != 0 && turn != 0) {
                     move(drive, turn);
                 } else if (firstMove == false) {
@@ -148,9 +162,9 @@ public class Automonous extends LinearOpMode {
                     hold(2);
                     move(0, 90);
                     firstMove = true;
-                }
+                }*/
                 // Prevent Explosions
-                sleep(10);
+                //sleep(10);
             }
         }
     }
@@ -173,45 +187,72 @@ public class Automonous extends LinearOpMode {
         RightWheel.setPower(rightPower);
     }
 
-    private void initVisionPortal(WebcamName Camera) {
-        // TFOD
-        tfod = new TfodProcessor.Builder().build();
-        // Set confidence threshold for TFOD recognitions, at any time.
-        tfod.setMinResultConfidence(0.90f);
-
+    private void initProcessors() {
         // AprilTag
-        aprilTag = new AprilTagProcessor.Builder().build();
-        // .setDrawAxes(false)
-        // .setDrawCubeProjection(false)
-        // .setDrawTagOutline(true)
-        // .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
-        // .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
-        // .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
-        aprilTag.setDecimation(2);
+        AprilTagProcessor.Builder AprilTagProcessorBuilder;
 
-        // VisionPortal
-        VisionPortal.Builder builder = new VisionPortal.Builder();
+        AprilTagProcessorBuilder = new AprilTagProcessor.Builder();
+        //AprilTagProcessorBuilder.setDecimation(2);
+
+        AprilTagProcessorFront = AprilTagProcessorBuilder.build();
+        AprilTagProcessorBack = AprilTagProcessorBuilder.build();
+
+        // TFOD
+        TfodProcessor.Builder TfodProcessorBuilder;
+
+        TfodProcessorBuilder = new TfodProcessor.Builder();
+        //TfodProcessorBuilder.setMinResultConfidence(0.90f);
+
+        TfodProcessorFront = TfodProcessorBuilder.build();
+        TfodProcessorBack = TfodProcessorBuilder.build();
+
+        // VisionPortal Initiation
+        VisionPortalBuilder = new VisionPortal.Builder();
+        initVisionPortal(
+            FrontCamera,
+            Portal1,
+            AprilTagProcessorFront,
+            TfodProcessorFront,
+            VisionPortalFront
+        );
+        initVisionPortal(
+            BackCamera,
+            Portal2,
+            AprilTagProcessorBack,
+            TfodProcessorBack,
+            VisionPortalBack
+        );
+    }
+    private void initVisionPortal( 
+        WebcamName Camera, 
+        int Portal, 
+        AprilTagProcessor AprilTagProc, 
+        TfodProcessor TFODProc,
+        VisionPortal VisionPortalFinal) {
         // Set the camera
-        builder.setCamera(Camera);
+        VisionPortalBuilder.setCamera(Camera);
         //builder.setCameraResolution(new Size(1920, 1080));
         // Enable the RC preview (LiveView).
         // false - to omit camera monitoring.
-        builder.enableLiveView(true);
+        VisionPortalBuilder.enableLiveView(true);
         // Set the stream format; MJPEG uses less bandwidth than default YUY2.
-        builder.setStreamFormat(VisionPortal.StreamFormat.MJPEG);
+        VisionPortalBuilder.setStreamFormat(VisionPortal.StreamFormat.MJPEG);
         // Choose whether LiveView stops if no processors enabled
         // true - monitor shows solid orange screen if no processors enabled
         // false - monitor shows camera view without annotations
-        builder.setAutoStopLiveView(true);
+        VisionPortalBuilder.setAutoStopLiveView(true);
         // Add processors
-        builder.addProcessors(tfod, aprilTag);
-        visionPortal = builder.build();
+        // Add Portal View IDs
+        VisionPortalBuilder.setLiveViewContainerId(Portal);
+        VisionPortalBuilder.addProcessors(TFODProc, AprilTagProc);
+        // Build VisionPortal
+        VisionPortalFinal = VisionPortalBuilder.build();
     }
 
-    private void visionPortalTelemetry() {
+    private void visionPortalTelemetry(AprilTagProcessor AprilTagProc, TfodProcessor TFODProc) {
         // TFOD
-        List<Recognition> currentRecognitions = tfod.getRecognitions();
-        telemetry.addData(String.format("I found %d Object(s) :D", currentRecognitions.size()));
+        List<Recognition> currentRecognitions = TFODProc.getRecognitions();
+        telemetry.addLine(String.format("I found %d Object(s) :D", currentRecognitions.size()));
         // Step through the list of recognitions and display info for each one.
         for (Recognition recognition : currentRecognitions) {
             double x = (recognition.getLeft() + recognition.getRight()) / 2;
@@ -223,8 +264,8 @@ public class Automonous extends LinearOpMode {
         }
 
         // AprilTag
-        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-        telemetry.addData(String.format("I found %d AprilTag(s) :D", currentDetections.size()));
+        List<AprilTagDetection> currentDetections = AprilTagProc.getDetections();
+        telemetry.addLine(String.format("I found %d AprilTag(s) :D", currentDetections.size()));
         // Step through the list of detections and display info for each one.
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null) {
@@ -246,31 +287,31 @@ public class Automonous extends LinearOpMode {
         telemetry.addLine("RBE = Range, Bearing & Elevation");
     }
 
-    private void setManualExposure(int exposureMS, int gain) {
+    private void setManualExposure(VisionPortal VisionPortalFinal,int exposureMS, int gain) {
         // Wait for the camera to be open, then use the controls
-        if (visionPortal == null) {
+        if (VisionPortalFinal == null) {
             return;
         }
         // Make sure camera is streaming before we try to set the exposure controls
-        if (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
+        if (VisionPortalFinal.getCameraState() != VisionPortal.CameraState.STREAMING) {
             telemetry.addData("mister camera", "I'm trying to find it");
-            telemetry.update();
-            while (!isStopRequested() && (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING)) {
+            //telemetry.update();
+            while (!isStopRequested() && (VisionPortalFinal.getCameraState() != VisionPortal.CameraState.STREAMING)) {
                 sleep(20);
             }
             telemetry.addData("mister camera", "it's here");
-            telemetry.update();
+            //telemetry.update();
         }
         // Set camera controls unless we are stopping.
         if (!isStopRequested()) {
-            ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+            ExposureControl exposureControl = VisionPortalFinal.getCameraControl(ExposureControl.class);
             if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
                 exposureControl.setMode(ExposureControl.Mode.Manual);
                 sleep(50);
             }
             exposureControl.setExposure((long) exposureMS, TimeUnit.MILLISECONDS);
             sleep(20);
-            GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
+            GainControl gainControl = VisionPortalFinal.getCameraControl(GainControl.class);
             gainControl.setGain(gain);
             sleep(20);
         }
