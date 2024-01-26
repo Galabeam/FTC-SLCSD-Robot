@@ -140,12 +140,14 @@ public class Automonous extends LinearOpMode {
                 visionPortalTelemetry();
                 telemetry.update();
                 // Move
-                private void int startingStage = 0;
+                private void bool firstMove = false;
                 if (drive != 0 && turn != 0) {
                     move(drive, turn);
-                } else if (startingStage == 0) {
+                } else if (firstMove == false) {
                     move(1, 0);
-                    startingStage += 1;
+                    hold(2);
+                    move(0, 90);
+                    firstMove = true;
                 }
                 // Prevent Explosions
                 sleep(10);
@@ -154,7 +156,7 @@ public class Automonous extends LinearOpMode {
     }
     // Functions
     public void hold(int seconds) {
-        sleep((seconds * 1000))
+        sleep((seconds * 1000));
     }
 
     public void move(double x, double yaw) {
