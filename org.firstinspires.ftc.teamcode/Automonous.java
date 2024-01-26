@@ -126,7 +126,7 @@ public class Automonous extends LinearOpMode {
                     telemetry.addData("Found", "ID %d (%s)", desiredTag.id, desiredTag.metadata.name);
                     telemetry.addData("Range", "%5.1f inches", desiredTag.ftcPose.range);
                     telemetry.addData("Bearing", "%3.0f inches", desiredTag.ftcPose.bearing);
-                } else {
+                } else if (firstMove == true) {
                     drive = 0;
                     turn = 0;
                 }
