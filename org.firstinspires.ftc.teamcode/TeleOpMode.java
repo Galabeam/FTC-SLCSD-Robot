@@ -19,7 +19,7 @@ public class TeleOpMode extends LinearOpMode {
 	// Expansion Hub
 	private DcMotor HangerPulleyBottom;
 
-	// On OpMode Activation
+	// Activation
 	@Override
 	public void runOpMode() {
 		// Control Hub
@@ -34,12 +34,12 @@ public class TeleOpMode extends LinearOpMode {
 
 		LeftWheel.setDirection(DcMotor.Direction.REVERSE);
 
-		// Initialization Code
+		// Initialization
 		waitForStart();
 		if (opModeIsActive()) {
-			// Run Code
+			// Run
 			while (opModeIsActive()) {
-				// Loop Code
+				// Loop
 				telemetry.update();
 
 				// Rear Wheels

@@ -142,7 +142,7 @@ public class AutonomousMode extends LinearOpMode {
                 visionPortalTelemetry();
                 telemetry.update();
                 // Move
-                if (drive != 0 && turn != 0) {
+                if (drive != 0 || turn != 0) {
                     move(drive, turn);
                 } else if (firstMove == false) {
                     move(1, 0);
