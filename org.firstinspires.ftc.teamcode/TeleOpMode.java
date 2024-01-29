@@ -9,29 +9,30 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "TeleOp")
 public class TeleOpMode extends LinearOpMode {
-
+	// Control Hub
 	private DcMotor LeftWheel;
 	private DcMotor RightWheel;
 	private DcMotor SidewaysWheel;
-	private DcMotor BroomSpinner;
-	private DcMotor PixelScooper;
-	private DcMotor ConveyorBelt;
+	private DcMotor HangerPulleyTop;
 	private Servo AirplaneLauncher;
+	private Servo RampDeployer;
+	// Expansion Hub
+	private DcMotor HangerPulleyBottom;
 
 	// On OpMode Activation
 	@Override
 	public void runOpMode() {
-
+		// Control Hub
 		LeftWheel = hardwareMap.get(DcMotor.class, "LeftWheel");
 		RightWheel = hardwareMap.get(DcMotor.class, "RightWheel");
 		SidewaysWheel = hardwareMap.get(DcMotor.class, "SidewaysWheel");
-		BroomSpinner = hardwareMap.get(DcMotor.class, "BroomSpinner");
-		PixelScooper = hardwareMap.get(DcMotor.class, "PixelScooper");
-		ConveyorBelt = hardwareMap.get(DcMotor.class, "ConveyorBelt");
+		HangerPulleyTop = hardwareMap.get(DcMotor.class, "HangerPulleyTop");
 		AirplaneLauncher = hardwareMap.get(Servo.class, "AirplaneLauncher");
+		RampDeployer = hardwareMap.get(Servo.class, "RampDeployer");
+		// Expansion Hub
+		HangerPulleyBottom = hardwareMap.get(DcMotor.class, "HangerPulleyBottom");
 
 		LeftWheel.setDirection(DcMotor.Direction.REVERSE);
-		PixelScooper.setDirection(DcMotor.Direction.REVERSE);
 
 		// Initialization Code
 		waitForStart();
@@ -41,16 +42,16 @@ public class TeleOpMode extends LinearOpMode {
 				// Loop Code
 				telemetry.update();
 
-				// Rear Wheels Forward/Backward
-				if (gamepad1.left_stick_y > 0) {
-					LeftWheel.setPower(gamepad1.left_stick_y);
-					RightWheel.setPower(gamepad1.left_stick_y);
-				}
-
-				// Rear Wheels Left/Right
+				// Rear Wheels
+				// Left/Right
 				if (gamepad1.left_stick_x > 0) {
 					LeftWheel.setPower(gamepad1.left_stick_x);
 					RightWheel.setPower(gamepad1.left_stick_x);
+				}
+				// Forward/Backward
+				if (gamepad1.left_stick_y > 0) {
+					LeftWheel.setPower(gamepad1.left_stick_y);
+					RightWheel.setPower(gamepad1.left_stick_y);
 				}
 
 				// Sideways Wheel
@@ -58,35 +59,28 @@ public class TeleOpMode extends LinearOpMode {
 					SidewaysWheel.setPower(gamepad1.right_stick_x);
 				}
 
-				// Pixel Scooper
-				if (gamepad1.right_stick_y > 0) {
-					PixelScooper.setPower(gamepad1.right_stick_y);
-				}
-
-				// Broom Spinner
-				if (gamepad1.b) {
-					BroomSpinner.setPower(0.3);
-				} else if (gamepad1.x) {
-					BroomSpinner.setPower(-0.3);
-				} else if (BroomSpinner.getPower() != 0) {
-					BroomSpinner.setPower(0);
-				}
-
-				// Conveyor Belt
+				// Hanger Pulley
 				if (gamepad1.y) {
-					ConveyorBelt.setPower(-0.75);
-				} else if (ConveyorBelt.getPower() != 0) {
-					ConveyorBelt.setPower(0);
+					HangerPulleyTop.setPower(0.1);
+				} else if (gamepad1.a) {
+					HangerPulleyBottom.setPower(0.1);
 				}
 
 				// Airplane Launcher
-				if (gamepad1.a) {
+				if (gamepad1.x) {
 					AirplaneLauncher.setPosition(0.5);
 				} else if (AirplaneLauncher.getPosition() != 0) {
 					AirplaneLauncher.setPosition(0);
 				}
 
-				// Wrong Buttons
+				// Ramp Deployer
+				if (gamepad1.b) {
+					AirplaneLauncher.setPosition(0.5);
+				} else if (AirplaneLauncher.getPosition() != 0) {
+					AirplaneLauncher.setPosition(0);
+				}
+
+				/* Wrong Buttons
 				if(
 					   !gamepad1.a
 					|| !gamepad1.y
@@ -95,7 +89,7 @@ public class TeleOpMode extends LinearOpMode {
 					|| !gamepad1.left_stick
 					|| !gamepad1.right_stick) {
 					gamepad1.rumble(0.8, 0.8, 200);
-				}
+				}/*
 			}
 		}
 	}
