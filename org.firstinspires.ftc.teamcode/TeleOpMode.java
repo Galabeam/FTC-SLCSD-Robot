@@ -41,27 +41,6 @@ public class TeleOpMode extends LinearOpMode {
                 telemetry.update();
 				// Speeds
 				int HangerPulleySpeed = 1;
-				if (gamepad1.dpad_up) {
-					if (gamepad1.start) {
-						if ((HangerPulleySpeed + 0.5) >= 1) {
-							HangerPulleySpeed = 1
-						} else {
-							HangerPulleySpeed += 0.5
-						}
-					} else if (HangerPulleySpeed < 0.9) {
-						HangerPulleySpeed += 0.1
-					}
-				} else if (gamepad1.dpad_down) {
-					if (gamepad1.start) {
-						if ((HangerPulleySpeed - 0.5) <= -1) {
-							HangerPulleySpeed = -1
-						} else {
-							HangerPulleySpeed -= 0.5
-						}
-					} else if (HangerPulleySpeed > -0.9) {
-						HangerPulleySpeed -= 0.1
-					}
-				}
 
                 // Rear Wheels
 				float LeftWheelPower = gamepad1.left_stick_x + gamepad1.left_stick_y;
