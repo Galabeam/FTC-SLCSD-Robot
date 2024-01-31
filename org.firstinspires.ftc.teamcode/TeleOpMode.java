@@ -30,7 +30,6 @@ public class TeleOpMode extends LinearOpMode {
         AirplaneLauncher = hardwareMap.get(Servo.class, "AirplaneLauncher");
         RampDeployer = hardwareMap.get(Servo.class, "RampDeployer");
         // Expansion Hub
-
         HangerPulleyBottom.setDirection(DcMotor.Direction.REVERSE);
 
         // Initialization
@@ -40,13 +39,40 @@ public class TeleOpMode extends LinearOpMode {
             while (opModeIsActive()) {
                 // Loop
                 telemetry.update();
+				// Speeds
+				int HangerPulleySpeed = 1;
+				if (gamepad1.dpad_up) {
+					if (gamepad1.start) {
+						if ((HangerPulleySpeed + 0.5) >= 1) {
+							HangerPulleySpeed = 1
+						} else {
+							HangerPulleySpeed += 0.5
+						}
+					} else if (HangerPulleySpeed < 0.9) {
+						HangerPulleySpeed += 0.1
+					}
+				} else if (gamepad1.dpad_down) {
+					if (gamepad1.start) {
+						if ((HangerPulleySpeed - 0.5) <= -1) {
+							HangerPulleySpeed = -1
+						} else {
+							HangerPulleySpeed -= 0.5
+						}
+					} else if (HangerPulleySpeed > -0.9) {
+						HangerPulleySpeed -= 0.1
+					}
+				}
 
                 // Rear Wheels
-                LeftWheel.setPower(gamepad1.left_stick_y);
-                RightWheel.setPower(gamepad1.left_stick_y * -1);
-
-                LeftWheel.setPower(gamepad1.left_stick_x);
-                RightWheel.setPower(gamepad1.left_stick_x);
+				float LeftWheelPower = gamepad1.left_stick_x + gamepad1.left_stick_y;
+				float RightWheelPower = gamepad1.left_stick_x + (gamepad1.left_stick_y * -1);
+				float WheelPowerMax = Math.max(Math.abs(LeftWheelPower),Math.abs(RightWheelPower));
+				if (WheelPowerMax > 1.0) {
+					LeftWheelPower /= WheelPowerMax;
+					RightWheelPower /= WheelPowerMax;
+				}
+				LeftWheel.setPower(LeftWheelPower);
+				RightWheel.setPower(RightWheelPower);
 
                 /* Sideways Wheel - R.I.P., my only invention
                 if (gamepad1.right_stick_x > 0) {
@@ -55,11 +81,11 @@ public class TeleOpMode extends LinearOpMode {
 
                 // Hanger Pulley
                 if (gamepad1.y) {
-                    HangerPulleyTop.setPower(0.5);
-                    HangerPulleyBottom.setPower(0.5);
+                    HangerPulleyTop.setPower(HangerPulleySpeed);
+                    HangerPulleyBottom.setPower(HangerPulleySpeed);
                 } else if (gamepad1.a) {
-                    HangerPulleyTop.setPower(-0.5);
-                    HangerPulleyBottom.setPower(-0.5);
+                    HangerPulleyTop.setPower(HangerPulleySpeed * -1);
+                    HangerPulleyBottom.setPower(HangerPulleySpeed * -1);
                 } else if (HangerPulleyTop.getPower() != 0 && HangerPulleyBottom.getPower() != 0) {
                     HangerPulleyTop.setPower(0);
                     HangerPulleyBottom.setPower(0);
