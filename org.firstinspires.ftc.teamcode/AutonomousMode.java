@@ -29,12 +29,6 @@ public class AutonomousMode extends LinearOpMode {
     private static final String[] LABELS = { // labels recognized in model for TFOD (must be in training order!)
         "Pixel",
     };
-
-    private VisionPortal visionPortal;
-    private TfodProcessor tfod;
-    private AprilTagProcessor aprilTag;
-    private AprilTagDetection desiredTag = null; // Used to hold the data for a detected AprilTag
-
     // How close camera should get to target (inches)
     final double DESIRED_DISTANCE = 6.0;
     // Set the GAIN constants to control the relationship between the measured
@@ -42,14 +36,14 @@ public class AutonomousMode extends LinearOpMode {
     // applied to the drive motors to correct the error.
     // Drive = Error * Gain Make these values smaller for smoother control, or
     // larger for a more aggressive response.
-    final double SPEED_GAIN = 0.05; // Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.
-                                    // (0.50 / 25.0)
-    final double TURN_GAIN = 0.01; // Turn Control "Gain". eg: Ramp up to 25% power at a 25 degree error. (0.25 /
-                                   // 25.0)
-
+    final double SPEED_GAIN = 0.05; // Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error. (0.50 / 25.0) 
+    final double TURN_GAIN = 0.01; // Turn Control "Gain". eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
     final double MAX_AUTO_SPEED = 1; // Clip the approach speed to this max value (adjust for your robot)
-    final double MAX_AUTO_TURN = 1;
-    ; // Clip the turn speed to this max value (adjust for your robot)
+    final double MAX_AUTO_TURN = 1; // Clip the turn speed to this max value (adjust for your robot)
+    private VisionPortal visionPortal;
+    private TfodProcessor tfod;
+    private AprilTagProcessor aprilTag;
+    private AprilTagDetection desiredTag = null; // Used to hold the data for a detected AprilTag
 
     private DcMotor LeftWheel; // leftback_drive
     private DcMotor RightWheel; // rightback_drive

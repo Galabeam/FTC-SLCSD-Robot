@@ -9,88 +9,87 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "TeleOp")
 public class TeleOpMode extends LinearOpMode {
-	// Control Hub
-	private DcMotor LeftWheel;
-	private DcMotor RightWheel;
-	private DcMotor SidewaysWheel;
-	private DcMotor HangerPulleyTop;
-	private Servo AirplaneLauncher;
-	private Servo RampDeployer;
-	// Expansion Hub
-	private DcMotor HangerPulleyBottom;
+    // Control Hub
+    private DcMotor LeftWheel;
+    private DcMotor RightWheel;
+    private DcMotor SidewaysWheel;
+    private DcMotor HangerPulleyTop;
+    private Servo AirplaneLauncher;
+    private Servo RampDeployer;
+    // Expansion Hub
+    private DcMotor HangerPulleyBottom;
 
-	// Activation
-	@Override
-	public void runOpMode() {
-		// Control Hub
-		LeftWheel = hardwareMap.get(DcMotor.class, "LeftWheel");
-		RightWheel = hardwareMap.get(DcMotor.class, "RightWheel");
-		SidewaysWheel = hardwareMap.get(DcMotor.class, "SidewaysWheel");
-		HangerPulleyTop = hardwareMap.get(DcMotor.class, "HangerPulleyTop");
-		AirplaneLauncher = hardwareMap.get(Servo.class, "AirplaneLauncher");
-		RampDeployer = hardwareMap.get(Servo.class, "RampDeployer");
-		// Expansion Hub
-		HangerPulleyBottom = hardwareMap.get(DcMotor.class, "HangerPulleyBottom");
+    // Activation
+    @Override
+    public void runOpMode() {
+        // Control Hub
+        LeftWheel = hardwareMap.get(DcMotor.class, "LeftWheel");
+        RightWheel = hardwareMap.get(DcMotor.class, "RightWheel");
+        HangerPulleyTop = hardwareMap.get(DcMotor.class, "HangerPulleyTop");
+        HangerPulleyBottom = hardwareMap.get(DcMotor.class, "HangerPulleyBottom");
+        AirplaneLauncher = hardwareMap.get(Servo.class, "AirplaneLauncher");
+        RampDeployer = hardwareMap.get(Servo.class, "RampDeployer");
+        // Expansion Hub
 
-		LeftWheel.setDirection(DcMotor.Direction.REVERSE);
+        HangerPulleyBottom.setDirection(DcMotor.Direction.REVERSE);
 
-		// Initialization
-		waitForStart();
-		if (opModeIsActive()) {
-			// Run
-			while (opModeIsActive()) {
-				// Loop
-				telemetry.update();
+        // Initialization
+        waitForStart();
+        if (opModeIsActive()) {
+            // Run
+            while (opModeIsActive()) {
+                // Loop
+                telemetry.update();
 
-				// Rear Wheels
-				// Left/Right
-				if (gamepad1.left_stick_x > 0) {
-					LeftWheel.setPower(gamepad1.left_stick_x);
-					RightWheel.setPower(gamepad1.left_stick_x);
-				}
-				// Forward/Backward
-				if (gamepad1.left_stick_y > 0) {
-					LeftWheel.setPower(gamepad1.left_stick_y);
-					RightWheel.setPower(gamepad1.left_stick_y);
-				}
+                // Rear Wheels
+                LeftWheel.setPower(gamepad1.left_stick_y);
+                RightWheel.setPower(gamepad1.left_stick_y * -1);
 
-				// Sideways Wheel
-				if (gamepad1.right_stick_x > 0) {
-					SidewaysWheel.setPower(gamepad1.right_stick_x);
-				}
+                LeftWheel.setPower(gamepad1.left_stick_x);
+                RightWheel.setPower(gamepad1.left_stick_x);
 
-				// Hanger Pulley
-				if (gamepad1.y) {
-					HangerPulleyTop.setPower(0.1);
-				} else if (gamepad1.a) {
-					HangerPulleyBottom.setPower(0.1);
-				}
+                /* Sideways Wheel - R.I.P., my only invention
+                if (gamepad1.right_stick_x > 0) {
+                    SidewaysWheel.setPower(gamepad1.right_stick_x);
+                }*/
 
-				// Airplane Launcher
-				if (gamepad1.x) {
-					AirplaneLauncher.setPosition(0.5);
-				} else if (AirplaneLauncher.getPosition() != 0) {
-					AirplaneLauncher.setPosition(0);
-				}
+                // Hanger Pulley
+                if (gamepad1.y) {
+                    HangerPulleyTop.setPower(0.5);
+                    HangerPulleyBottom.setPower(0.5);
+                } else if (gamepad1.a) {
+                    HangerPulleyTop.setPower(-0.5);
+                    HangerPulleyBottom.setPower(-0.5);
+                } else if (HangerPulleyTop.getPower() != 0 && HangerPulleyBottom.getPower() != 0) {
+                    HangerPulleyTop.setPower(0);
+                    HangerPulleyBottom.setPower(0);
+                }
 
-				// Ramp Deployer
-				if (gamepad1.b) {
-					AirplaneLauncher.setPosition(0.5);
-				} else if (AirplaneLauncher.getPosition() != 0) {
-					AirplaneLauncher.setPosition(0);
-				}
+                // Airplane Launcher
+                if (gamepad1.x) {
+                    AirplaneLauncher.setPosition(0.5);
+                } else if (AirplaneLauncher.getPosition() != 0) {
+                    AirplaneLauncher.setPosition(0);
+                }
 
-				/* Wrong Buttons
-				if(
-					   !gamepad1.a
-					|| !gamepad1.y
-					|| !gamepad1.b
-					|| !gamepad1.x
-					|| !gamepad1.left_stick
-					|| !gamepad1.right_stick) {
-					gamepad1.rumble(0.8, 0.8, 200);
-				}/*
-			}
-		}
-	}
+                // Ramp Deployer
+                if (gamepad1.b) {
+                    RampDeployer.setPosition(0.5);
+                } else if (RampDeployer.getPosition() != 0) {
+                    RampDeployer.setPosition(0);
+                }
+
+                /* Wrong Buttons
+                if(
+                       !gamepad1.a
+                    || !gamepad1.y
+                    || !gamepad1.b
+                    || !gamepad1.x
+                    || !gamepad1.left_stick
+                    || !gamepad1.right_stick) {
+                    gamepad1.rumble(0.8, 0.8, 200);
+                }*/
+            }
+        }
+    }
 }
