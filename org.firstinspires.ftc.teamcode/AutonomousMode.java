@@ -45,39 +45,41 @@ public class AutonomousMode extends LinearOpMode {
     private AprilTagProcessor aprilTag;
     private AprilTagDetection desiredTag = null; // Used to hold the data for a detected AprilTag
 
-    private DcMotor LeftWheel; // leftback_drive
-    private DcMotor RightWheel; // rightback_drive
-    private DcMotor SidewaysWheel; // middle_drive
-    private DcMotor BroomSpinner;
-    private DcMotor PixelScooper;
-    private DcMotor ConveyorBelt;
-    private Servo AirplaneLauncher;
-    private WebcamName FrontCamera; // Mister
-    private WebcamName BackCamera; // Missus
+// Motors
+/*1*/	private DcMotor LeftWheel;
+/*2*/  	private DcMotor RightWheel;
+/*3*/   private DcMotor HangerPulleyTop;
+/*4*/   private DcMotor HangerPulleyBottom;
+// Servos
+/*1*/   private DcMotor AirplaneLauncher;
+/*2*/   private DcMotor RampDeployer;
+// USBs  
+/*2.0*/ private DcMotor Camera;
 
     @Override
     public void runOpMode() {
         boolean targetFound = false; // Set to true when an AprilTag target is detected
         double drive = 0; // Desired forward power/speed (-1 to +1)
         double turn = 0; // Desired turning power/speed (-1 to +1)
-        // Hardware
-        /*LeftWheel = hardwareMap.get(DcMotor.class, "LeftWheel");
-        RightWheel = hardwareMap.get(DcMotor.class, "RightWheel");
-        SidewaysWheel = hardwareMap.get(DcMotor.class, "SidewaysWheel");
-        BroomSpinner = hardwareMap.get(DcMotor.class, "BroomSpinner");
-        PixelScooper = hardwareMap.get(DcMotor.class, "PixelScooper");
-        ConveyorBelt = hardwareMap.get(DcMotor.class, "ConveyorBelt");
-        AirplaneLauncher = hardwareMap.get(Servo.class, "AirplaneLauncher");
-        */
-        FrontCamera = hardwareMap.get(WebcamName.class, "FrontCamera");
-        BackCamera = hardwareMap.get(WebcamName.class, "BackCamera");
+// Motors
+/*1*/	LeftWheel = 		hardwareMap.get(DcMotor.class,"LeftWheel");
+/*2*/  	RightWheel = 		hardwareMap.get(DcMotor.class,"RightWheel");
+/*3*/   HangerPulleyTop = 	hardwareMap.get(DcMotor.class,"HangerPulleyTop");
+/*4*/   HangerPulleyBottom =hardwareMap.get(DcMotor.class,"HangerPulleyBottom");
+// Servos
+/*1*/   AirplaneLauncher = 	hardwareMap.get(Servo.class,"AirplaneLauncher");
+/*2*/   RampDeployer = 		hardwareMap.get(Servo.class,"RampDeployer");
+// USBs  
+/*2.0*/ Camera = 			hardwareMap.get(WebcamName.class,"Camera");
+		// Hardware properties
+        HangerPulleyBottom.setDirection(DcMotor.Direction.REVERSE);
         // VisionPortal Initiation (TFOD/AprilTag)
         initVisionPortal(FrontCamera);
         //initVisionPortal(BackCamera);
         setManualExposure(1, 1);
 
-        // LeftWheel.setDirection(DcMotor.Direction.REVERSE);
-        //RightWheel.setDirection(DcMotor.Direction.REVERSE);
+        LeftWheel.setDirection(DcMotor.Direction.REVERSE);
+        RightWheel.setDirection(DcMotor.Direction.REVERSE);
         //PixelScooper.setDirection(DcMotor.Direction.REVERSE);
 
         // Wait for the DS start button to be touched.

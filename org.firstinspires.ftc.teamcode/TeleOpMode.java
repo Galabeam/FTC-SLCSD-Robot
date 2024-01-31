@@ -9,29 +9,33 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "TeleOp")
 public class TeleOpMode extends LinearOpMode {
-    // Control Hub
-    private DcMotor LeftWheel;
-    private DcMotor RightWheel;
-    private DcMotor SidewaysWheel;
-    private DcMotor HangerPulleyTop;
-    private Servo AirplaneLauncher;
-    private Servo RampDeployer;
-    // Expansion Hub
-    private DcMotor HangerPulleyBottom;
+// Motors
+/*1*/	private DcMotor LeftWheel;
+/*2*/  	private DcMotor RightWheel;
+/*3*/   private DcMotor HangerPulleyTop;
+/*4*/   private DcMotor HangerPulleyBottom;
+// Servos
+/*1*/   private DcMotor AirplaneLauncher;
+/*2*/   private DcMotor RampDeployer;
+// USBs  
+/*2.0*/ private DcMotor Camera;
 
     // Activation
     @Override
     public void runOpMode() {
-        // Control Hub
-        LeftWheel = hardwareMap.get(DcMotor.class, "LeftWheel");
-        RightWheel = hardwareMap.get(DcMotor.class, "RightWheel");
-        HangerPulleyTop = hardwareMap.get(DcMotor.class, "HangerPulleyTop");
-        HangerPulleyBottom = hardwareMap.get(DcMotor.class, "HangerPulleyBottom");
-        AirplaneLauncher = hardwareMap.get(Servo.class, "AirplaneLauncher");
-        RampDeployer = hardwareMap.get(Servo.class, "RampDeployer");
-        // Expansion Hub
+// Motors
+/*1*/	LeftWheel = 		hardwareMap.get(DcMotor.class,"LeftWheel");
+/*2*/  	RightWheel = 		hardwareMap.get(DcMotor.class,"RightWheel");
+/*3*/   HangerPulleyTop = 	hardwareMap.get(DcMotor.class,"HangerPulleyTop");
+/*4*/   HangerPulleyBottom =hardwareMap.get(DcMotor.class,"HangerPulleyBottom");
+// Servos
+/*1*/   AirplaneLauncher = 	hardwareMap.get(Servo.class,"AirplaneLauncher");
+/*2*/   RampDeployer = 		hardwareMap.get(Servo.class,"RampDeployer");
+// USBs  
+/*2.0*/ Camera = 			hardwareMap.get(WebcamName.class,"Camera");
+		// Hardware properties
         HangerPulleyBottom.setDirection(DcMotor.Direction.REVERSE);
-
+		
         // Initialization
         waitForStart();
         if (opModeIsActive()) {
@@ -56,7 +60,7 @@ public class TeleOpMode extends LinearOpMode {
 				telemetry.addData("- Left Wheel Power","%",LeftWheelPower);
 				telemetry.addData("- Right Wheel Power","%",RightWheelPower);
 
-                /* Sideways Wheel - R.I.P., my only invention
+                /* Sideways Wheel - R.I.P., my only contribution besides programming to this robot
                 if (gamepad1.right_stick_x > 0) {
                     SidewaysWheel.setPower(gamepad1.right_stick_x);
                 }*/

@@ -1,9 +1,12 @@
 # README
 
-## I use VSC[^1] and not Android Studio because I'm more familiar with VSC, since our school is stuck on chromebooks, we have to use the browser versions of software and Android Studio doesn't have a browser version as far as I know. Even if there's a broswer version, there's a chance that the dingus at IT blocks it
+## VSC[^1] and Android Studio are in use, just a disclaimer
 
-I want to document **The Battle of the Engineers and the Programmer**, daily the engineers change the robot by adding or removing different ideas and I have to figure out what does and doesn't stay in the code. So, if you see a bunch of commented code, that's why.
+### Miscellaneous information
+
+I want to document **The Battle of the Engineers and the Programmer**, daily the engineers modify the robot by attaching or removing different parts or ideas and I have to sort out what does and does not stay in the code. So, if you see a legion[^2] of commented code, that is the leading reason why.
 
 (I'm legally obligated to say that this is not against the engineers. This is stated on behalf of the programmer.)
 
 [^1]: Visual Studio Code
+[^2]: (adjective) many, numerous; a large number of
