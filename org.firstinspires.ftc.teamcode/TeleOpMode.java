@@ -39,8 +39,8 @@ public class TeleOpMode extends LinearOpMode {
             while (opModeIsActive()) {
                 // Loop
                 telemetry.update();
-				// Speeds
-				int HangerPulleySpeed = 1;
+				// Powers
+				int HangerPulleyPower = 1;
 
                 // Rear Wheels
 				float LeftWheelPower = gamepad1.left_stick_x + gamepad1.left_stick_y;
@@ -52,6 +52,9 @@ public class TeleOpMode extends LinearOpMode {
 				}
 				LeftWheel.setPower(LeftWheelPower);
 				RightWheel.setPower(RightWheelPower);
+				telemetry.addLine("Wheel Power");
+				telemetry.addData("- Left Wheel Power","%",LeftWheelPower);
+				telemetry.addData("- Right Wheel Power","%",RightWheelPower);
 
                 /* Sideways Wheel - R.I.P., my only invention
                 if (gamepad1.right_stick_x > 0) {
@@ -60,11 +63,11 @@ public class TeleOpMode extends LinearOpMode {
 
                 // Hanger Pulley
                 if (gamepad1.y) {
-                    HangerPulleyTop.setPower(HangerPulleySpeed);
-                    HangerPulleyBottom.setPower(HangerPulleySpeed);
+                    HangerPulleyTop.setPower(HangerPulleyPower);
+                    HangerPulleyBottom.setPower(HangerPulleyPower);
                 } else if (gamepad1.a) {
-                    HangerPulleyTop.setPower(HangerPulleySpeed * -1);
-                    HangerPulleyBottom.setPower(HangerPulleySpeed * -1);
+                    HangerPulleyTop.setPower(HangerPulleyPower * -1);
+                    HangerPulleyBottom.setPower(HangerPulleyPower * -1);
                 } else if (HangerPulleyTop.getPower() != 0 && HangerPulleyBottom.getPower() != 0) {
                     HangerPulleyTop.setPower(0);
                     HangerPulleyBottom.setPower(0);
