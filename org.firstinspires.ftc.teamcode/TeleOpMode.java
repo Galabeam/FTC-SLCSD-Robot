@@ -43,7 +43,12 @@ public class TeleOpMode extends LinearOpMode {
             while (opModeIsActive()) {
                 // Loop
                 telemetry.update();
-				// Powers
+				// Variables
+                boolean Debug = false;
+                if (gamepad1.guide) {
+                    Debug = !Debug;
+                }
+                // Powers
 				int HangerPulleyPower = 1;
 
                 // Rear Wheels
@@ -56,13 +61,12 @@ public class TeleOpMode extends LinearOpMode {
 				}
 				LeftWheel.setPower(LeftWheelPower);
 				RightWheel.setPower(RightWheelPower);
-				telemetry.addLine("Wheel Power");
-				telemetry.addData("- Left Wheel Power","%",LeftWheelPower);
-				telemetry.addData("- Right Wheel Power","%",RightWheelPower);
 
                 /* Sideways Wheel - R.I.P., my only contribution besides programming to this robot
                 if (gamepad1.right_stick_x > 0) {
                     SidewaysWheel.setPower(gamepad1.right_stick_x);
+                } else if (SidewaysWheel.getPower() != 0) {
+                    SidewaysWheel.setPower(0);
                 }*/
 
                 // Hanger Pulley
@@ -101,6 +105,14 @@ public class TeleOpMode extends LinearOpMode {
                     || !gamepad1.right_stick) {
                     gamepad1.rumble(0.8, 0.8, 200);
                 }*/
+
+                // Debug
+                if (Debug) {
+                    // Wheel Power
+                    telemetry.addLine("Wheel Power - Debug");
+				    telemetry.addData("- Left Wheel Power","%",LeftWheelPower);
+				    telemetry.addData("- Right Wheel Power","%",RightWheelPower);
+                }
             }
         }
     }
