@@ -52,7 +52,7 @@ public class AutonomousMode extends LinearOpMode {
 /*3*/   private DcMotor HangerPulleyTop;
 /*4*/   private DcMotor HangerPulleyBottom;
 // Servos
-/*1*/   private Servo AirplaneLauncher;
+/*1*/   private Servo DroneLauncher;
 /*2*/   private Servo RampDeployer;
 // USBs  
 /*2.0*/ private WebcamName Camera;
@@ -80,7 +80,6 @@ public class AutonomousMode extends LinearOpMode {
         setManualExposure(1, 1);
 
         LeftWheel.setDirection(DcMotor.Direction.REVERSE);
-        RightWheel.setDirection(DcMotor.Direction.REVERSE);
         //PixelScooper.setDirection(DcMotor.Direction.REVERSE);
 
         // Wait for the DS start button to be touched.
@@ -142,11 +141,12 @@ public class AutonomousMode extends LinearOpMode {
                 if (drive != 0 || turn != 0) {
                     move(drive, turn);
                 } else if (firstMove == false) {
-                    int InchesToDrive = 18;
+                    int InchesToDrive = 48;
+                    int WheelDiameter = 4;
 
                     LeftWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     RightWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    double Circumference = Math.pi*1; // pi * diameter
+                    double Circumference = 3.14*(WheelDiameter*5); // pi * diameter
                     double RotationsNeeded = InchesToDrive/Circumference;
                     int EncoderDrivingTarget = (int)(RotationsNeeded*1120);
                     LeftWheel.setTargetPosition(EncoderDrivingTarget);
@@ -166,7 +166,8 @@ public class AutonomousMode extends LinearOpMode {
                     LeftWheel.setPower(0);
                     RightWheel.setPower(0);
 
-                    firstMove = true;
+                    //firstMove = true;
+                    sleep(10000);
                 }
                 // Prevent Explosions
                 sleep(10);

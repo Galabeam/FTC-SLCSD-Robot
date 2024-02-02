@@ -111,7 +111,7 @@ public class TeleOpMode extends LinearOpMode {
                 if (Debug) {
                     // Battery Percentage
                     telemetry.addLine("Battery");
-                    telemetry.addData("- Percentage","%",((getVoltage()/16)*100));
+                    telemetry.addData("- Percentage","%",((getVoltage()/15)*100));
                     telemetry.addData("- Voltage","%",getVoltage());
                     // Wheel Power
                     telemetry.addLine("Wheel Power - Debug");
