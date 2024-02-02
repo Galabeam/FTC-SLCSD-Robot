@@ -16,7 +16,7 @@ public class TeleOpMode extends LinearOpMode {
 /*3*/   private DcMotor HangerPulleyTop;
 /*4*/   private DcMotor HangerPulleyBottom;
 // Servos
-/*1*/   private Servo AirplaneLauncher;
+/*1*/   private Servo DroneLauncher;
 /*2*/   private Servo RampDeployer;
 // USBs  
 /*2.0*/ private WebcamName Camera;
@@ -30,7 +30,7 @@ public class TeleOpMode extends LinearOpMode {
 /*3*/   HangerPulleyTop =   hardwareMap.get(DcMotor.class,"HangerPulleyTop");
 /*4*/   HangerPulleyBottom =hardwareMap.get(DcMotor.class,"HangerPulleyBottom");
 // Servos
-/*1*/   AirplaneLauncher =  hardwareMap.get(Servo.class,"AirplaneLauncher");
+/*1*/   DroneLauncher =     hardwareMap.get(Servo.class,"DroneLauncher");
 /*2*/   RampDeployer =      hardwareMap.get(Servo.class,"RampDeployer");
 // USBs  
 /*2.0*/ Camera =            hardwareMap.get(WebcamName.class,"Camera");
@@ -84,9 +84,9 @@ public class TeleOpMode extends LinearOpMode {
 
                 // Airplane Launcher
                 if (gamepad1.x) {
-                    AirplaneLauncher.setPosition(0.5);
-                } else if (AirplaneLauncher.getPosition() != 0) {
-                    AirplaneLauncher.setPosition(0);
+                    DroneLauncher.setPosition(0.5);
+                } else if (DroneLauncher.getPosition() != 0) {
+                    DroneLauncher.setPosition(0);
                 }
 
                 // Ramp Deployer
@@ -109,6 +109,10 @@ public class TeleOpMode extends LinearOpMode {
 
                 // Debug
                 if (Debug) {
+                    // Battery Percentage
+                    telemetry.addLine("Battery");
+                    telemetry.addData("- Percentage","%",((getVoltage()/16)*100));
+                    telemetry.addData("- Voltage","%",getVoltage());
                     // Wheel Power
                     telemetry.addLine("Wheel Power - Debug");
                     telemetry.addData("- Left Wheel Power","%",LeftWheelPower);

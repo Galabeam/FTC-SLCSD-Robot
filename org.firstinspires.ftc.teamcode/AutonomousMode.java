@@ -68,7 +68,7 @@ public class AutonomousMode extends LinearOpMode {
 /*3*/   HangerPulleyTop =   hardwareMap.get(DcMotor.class,"HangerPulleyTop");
 /*4*/   HangerPulleyBottom =hardwareMap.get(DcMotor.class,"HangerPulleyBottom");
 // Servos
-/*1*/   AirplaneLauncher =  hardwareMap.get(Servo.class,"AirplaneLauncher");
+/*1*/   DroneLauncher =     hardwareMap.get(Servo.class,"DroneLauncher");
 /*2*/   RampDeployer =      hardwareMap.get(Servo.class,"RampDeployer");
 // USBs  
 /*2.0*/ Camera =            hardwareMap.get(WebcamName.class,"Camera");
