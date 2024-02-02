@@ -142,10 +142,12 @@ public class AutonomousMode extends LinearOpMode {
                 if (drive != 0 || turn != 0) {
                     move(drive, turn);
                 } else if (firstMove == false) {
+                    int InchesToDrive = 18;
+
                     LeftWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     RightWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    double Circumference = Math.pi*1;
-                    double RotationsNeeded = 18/Circumference;
+                    double Circumference = Math.pi*1; // pi * diameter
+                    double RotationsNeeded = InchesToDrive/Circumference;
                     int EncoderDrivingTarget = (int)(RotationsNeeded*1120);
                     LeftWheel.setTargetPosition(EncoderDrivingTarget);
                     RightWheel.setTargetPosition(EncoderDrivingTarget);
