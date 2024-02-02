@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -10,32 +11,32 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @TeleOp(name = "TeleOp")
 public class TeleOpMode extends LinearOpMode {
 // Motors
-/*1*/	private DcMotor LeftWheel;
-/*2*/  	private DcMotor RightWheel;
+/*1*/   private DcMotor LeftWheel;
+/*2*/   private DcMotor RightWheel;
 /*3*/   private DcMotor HangerPulleyTop;
 /*4*/   private DcMotor HangerPulleyBottom;
 // Servos
-/*1*/   private DcMotor AirplaneLauncher;
-/*2*/   private DcMotor RampDeployer;
+/*1*/   private Servo AirplaneLauncher;
+/*2*/   private Servo RampDeployer;
 // USBs  
-/*2.0*/ private DcMotor Camera;
+/*2.0*/ private WebcamName Camera;
 
     // Activation
     @Override
     public void runOpMode() {
 // Motors
-/*1*/	LeftWheel = 		hardwareMap.get(DcMotor.class,"LeftWheel");
-/*2*/  	RightWheel = 		hardwareMap.get(DcMotor.class,"RightWheel");
-/*3*/   HangerPulleyTop = 	hardwareMap.get(DcMotor.class,"HangerPulleyTop");
+/*1*/   LeftWheel =         hardwareMap.get(DcMotor.class,"LeftWheel");
+/*2*/   RightWheel =        hardwareMap.get(DcMotor.class,"RightWheel");
+/*3*/   HangerPulleyTop =   hardwareMap.get(DcMotor.class,"HangerPulleyTop");
 /*4*/   HangerPulleyBottom =hardwareMap.get(DcMotor.class,"HangerPulleyBottom");
 // Servos
-/*1*/   AirplaneLauncher = 	hardwareMap.get(Servo.class,"AirplaneLauncher");
-/*2*/   RampDeployer = 		hardwareMap.get(Servo.class,"RampDeployer");
+/*1*/   AirplaneLauncher =  hardwareMap.get(Servo.class,"AirplaneLauncher");
+/*2*/   RampDeployer =      hardwareMap.get(Servo.class,"RampDeployer");
 // USBs  
-/*2.0*/ Camera = 			hardwareMap.get(WebcamName.class,"Camera");
-		// Hardware properties
+/*2.0*/ Camera =            hardwareMap.get(WebcamName.class,"Camera");
+        // Hardware properties
         HangerPulleyBottom.setDirection(DcMotor.Direction.REVERSE);
-		
+        
         // Initialization
         waitForStart();
         if (opModeIsActive()) {
@@ -43,24 +44,24 @@ public class TeleOpMode extends LinearOpMode {
             while (opModeIsActive()) {
                 // Loop
                 telemetry.update();
-				// Variables
+                // Variables
                 boolean Debug = false;
                 if (gamepad1.guide) {
                     Debug = !Debug;
                 }
                 // Powers
-				int HangerPulleyPower = 1;
+                int HangerPulleyPower = 1;
 
                 // Rear Wheels
-				float LeftWheelPower = gamepad1.left_stick_x + gamepad1.left_stick_y;
-				float RightWheelPower = gamepad1.left_stick_x + (gamepad1.left_stick_y * -1);
-				float WheelPowerMax = Math.max(Math.abs(LeftWheelPower),Math.abs(RightWheelPower));
-				if (WheelPowerMax > 1.0) {
-					LeftWheelPower /= WheelPowerMax;
-					RightWheelPower /= WheelPowerMax;
-				}
-				LeftWheel.setPower(LeftWheelPower);
-				RightWheel.setPower(RightWheelPower);
+                float LeftWheelPower = gamepad1.left_stick_x + gamepad1.left_stick_y;
+                float RightWheelPower = gamepad1.left_stick_x + (gamepad1.left_stick_y * -1);
+                float WheelPowerMax = Math.max(Math.abs(LeftWheelPower),Math.abs(RightWheelPower));
+                if (WheelPowerMax > 1.0) {
+                    LeftWheelPower /= WheelPowerMax;
+                    RightWheelPower /= WheelPowerMax;
+                }
+                LeftWheel.setPower(LeftWheelPower);
+                RightWheel.setPower(RightWheelPower);
 
                 /* Sideways Wheel - R.I.P., my only contribution besides programming to this robot
                 if (gamepad1.right_stick_x > 0) {
@@ -71,11 +72,11 @@ public class TeleOpMode extends LinearOpMode {
 
                 // Hanger Pulley
                 if (gamepad1.y) {
-                    HangerPulleyTop.setPower(HangerPulleyPower);
-                    HangerPulleyBottom.setPower(HangerPulleyPower);
-                } else if (gamepad1.a) {
                     HangerPulleyTop.setPower(HangerPulleyPower * -1);
                     HangerPulleyBottom.setPower(HangerPulleyPower * -1);
+                } else if (gamepad1.a) {
+                    HangerPulleyTop.setPower(HangerPulleyPower);
+                    HangerPulleyBottom.setPower(HangerPulleyPower);
                 } else if (HangerPulleyTop.getPower() != 0 && HangerPulleyBottom.getPower() != 0) {
                     HangerPulleyTop.setPower(0);
                     HangerPulleyBottom.setPower(0);
@@ -110,8 +111,8 @@ public class TeleOpMode extends LinearOpMode {
                 if (Debug) {
                     // Wheel Power
                     telemetry.addLine("Wheel Power - Debug");
-				    telemetry.addData("- Left Wheel Power","%",LeftWheelPower);
-				    telemetry.addData("- Right Wheel Power","%",RightWheelPower);
+                    telemetry.addData("- Left Wheel Power","%",LeftWheelPower);
+                    telemetry.addData("- Right Wheel Power","%",RightWheelPower);
                 }
             }
         }

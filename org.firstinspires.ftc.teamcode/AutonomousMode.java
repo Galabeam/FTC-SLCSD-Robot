@@ -40,21 +40,22 @@ public class AutonomousMode extends LinearOpMode {
     final double TURN_GAIN = 0.01; // Turn Control "Gain". eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
     final double MAX_AUTO_SPEED = 1; // Clip the approach speed to this max value (adjust for your robot)
     final double MAX_AUTO_TURN = 1; // Clip the turn speed to this max value (adjust for your robot)
+    static final int MOTOR_TICKS_COUNTS = 1120;
     private VisionPortal visionPortal;
     private TfodProcessor tfod;
     private AprilTagProcessor aprilTag;
     private AprilTagDetection desiredTag = null; // Used to hold the data for a detected AprilTag
 
 // Motors
-/*1*/	private DcMotor LeftWheel;
-/*2*/  	private DcMotor RightWheel;
+/*1*/   private DcMotor LeftWheel;
+/*2*/   private DcMotor RightWheel;
 /*3*/   private DcMotor HangerPulleyTop;
 /*4*/   private DcMotor HangerPulleyBottom;
 // Servos
-/*1*/   private DcMotor AirplaneLauncher;
-/*2*/   private DcMotor RampDeployer;
+/*1*/   private Servo AirplaneLauncher;
+/*2*/   private Servo RampDeployer;
 // USBs  
-/*2.0*/ private DcMotor Camera;
+/*2.0*/ private WebcamName Camera;
 
     @Override
     public void runOpMode() {
@@ -62,19 +63,19 @@ public class AutonomousMode extends LinearOpMode {
         double drive = 0; // Desired forward power/speed (-1 to +1)
         double turn = 0; // Desired turning power/speed (-1 to +1)
 // Motors
-/*1*/	LeftWheel = 		hardwareMap.get(DcMotor.class,"LeftWheel");
-/*2*/  	RightWheel = 		hardwareMap.get(DcMotor.class,"RightWheel");
-/*3*/   HangerPulleyTop = 	hardwareMap.get(DcMotor.class,"HangerPulleyTop");
+/*1*/   LeftWheel =         hardwareMap.get(DcMotor.class,"LeftWheel");
+/*2*/   RightWheel =        hardwareMap.get(DcMotor.class,"RightWheel");
+/*3*/   HangerPulleyTop =   hardwareMap.get(DcMotor.class,"HangerPulleyTop");
 /*4*/   HangerPulleyBottom =hardwareMap.get(DcMotor.class,"HangerPulleyBottom");
 // Servos
-/*1*/   AirplaneLauncher = 	hardwareMap.get(Servo.class,"AirplaneLauncher");
-/*2*/   RampDeployer = 		hardwareMap.get(Servo.class,"RampDeployer");
+/*1*/   AirplaneLauncher =  hardwareMap.get(Servo.class,"AirplaneLauncher");
+/*2*/   RampDeployer =      hardwareMap.get(Servo.class,"RampDeployer");
 // USBs  
-/*2.0*/ Camera = 			hardwareMap.get(WebcamName.class,"Camera");
-		// Hardware properties
+/*2.0*/ Camera =            hardwareMap.get(WebcamName.class,"Camera");
+        // Hardware properties
         HangerPulleyBottom.setDirection(DcMotor.Direction.REVERSE);
         // VisionPortal Initiation (TFOD/AprilTag)
-        initVisionPortal(FrontCamera);
+        initVisionPortal(Camera);
         //initVisionPortal(BackCamera);
         setManualExposure(1, 1);
 
@@ -141,9 +142,28 @@ public class AutonomousMode extends LinearOpMode {
                 if (drive != 0 || turn != 0) {
                     move(drive, turn);
                 } else if (firstMove == false) {
-                    move(1, 0);
-                    hold(2);
-                    move(0, 90);
+                    LeftWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    RightWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    double Circumference = Math.pi*1;
+                    double RotationsNeeded = 18/Circumference;
+                    int EncoderDrivingTarget = (int)(RotationsNeeded*1120);
+                    LeftWheel.setTargetPosition(EncoderDrivingTarget);
+                    RightWheel.setTargetPosition(EncoderDrivingTarget);
+
+                    LeftWheel.setPower(1);
+                    RightWheel.setPower(1);
+
+                    LeftWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    RightWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    while (LeftWheel.isBusy() || RightWheel.isBusy()) {
+                        telemetry.addData("Path","Driving Towards Board");
+                        telemetry.update();
+                    }
+
+                    LeftWheel.setPower(0);
+                    RightWheel.setPower(0);
+
                     firstMove = true;
                 }
                 // Prevent Explosions
