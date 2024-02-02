@@ -141,7 +141,8 @@ public class AutonomousMode extends LinearOpMode {
                 if (drive != 0 || turn != 0) {
                     move(drive, turn);
                 } else if (firstMove == false) {
-                    int InchesToDrive = 48;
+                    int DegreesToTurn = 0;
+                    int InchesToDrive = 15;
                     int WheelDiameter = 4;
 
                     LeftWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -149,25 +150,36 @@ public class AutonomousMode extends LinearOpMode {
                     double Circumference = 3.14*(WheelDiameter*5); // pi * diameter
                     double RotationsNeeded = InchesToDrive/Circumference;
                     int EncoderDrivingTarget = (int)(RotationsNeeded*1120);
+
+                    // Forward 15in 
                     LeftWheel.setTargetPosition(EncoderDrivingTarget);
                     RightWheel.setTargetPosition(EncoderDrivingTarget);
-
                     LeftWheel.setPower(1);
                     RightWheel.setPower(1);
-
                     LeftWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     RightWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
                     while (LeftWheel.isBusy() || RightWheel.isBusy()) {
-                        telemetry.addData("Path","Driving Towards Board");
-                        telemetry.update();
+                    }
+
+                    // Turn 90deg CCW
+                    DegreesToTurn = 90;
+                    InchesToDrive = DegreesToTurn/9;
+
+                    LeftWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    RightWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    LeftWheel.setTargetPosition(EncoderDrivingTarget);
+                    RightWheel.setTargetPosition(EncoderDrivingTarget);
+                    LeftWheel.setPower(-1);
+                    RightWheel.setPower(1);
+
+                    while (LeftWheel.isBusy() || RightWheel.isBusy()) {
                     }
 
                     LeftWheel.setPower(0);
                     RightWheel.setPower(0);
 
-                    //firstMove = true;
-                    sleep(10000);
+                    requestOpModeStop()
                 }
                 // Prevent Explosions
                 sleep(10);
@@ -177,6 +189,9 @@ public class AutonomousMode extends LinearOpMode {
     // Functions
     public void hold(int seconds) {
         sleep((seconds * 1000));
+    }
+
+    public void AssistedMove(int Deg,int In) {
     }
 
     public void move(double x, double yaw) {
