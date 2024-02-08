@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.VoltageSensor
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -26,8 +24,6 @@ public class TeleOpMode extends LinearOpMode {
 /*2*/   RightWheel =    hardwareMap.get(DcMotor.class,"RightWheel");
 // Built-in
         VoltageSensor = hardwareMap.voltageSensor.iterator().next();
-        // Hardware properties
-        HangerBottom.setDirection(DcMotor.Direction.REVERSE);
         
         // Initialization
         waitForStart();
