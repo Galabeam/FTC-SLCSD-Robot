@@ -12,6 +12,7 @@ public class TeleOpMode extends LinearOpMode {
 // Motors
 /*1*/   private DcMotor LeftWheel;
 /*2*/   private DcMotor RightWheel;
+/*3*/   private DcMotor SidewaysWheel;
 // Built-in
         private VoltageSensor VoltageSensor;
         private double VoltageSensorThreshold = 15;
@@ -22,6 +23,7 @@ public class TeleOpMode extends LinearOpMode {
 // Motors
 /*1*/   LeftWheel =     hardwareMap.get(DcMotor.class,"LeftWheel");
 /*2*/   RightWheel =    hardwareMap.get(DcMotor.class,"RightWheel");
+/*3*/   SidewaysWheel = hardwareMap.get(DcMotor.class,"SidewaysWheel");
 // Built-in
         VoltageSensor = hardwareMap.voltageSensor.iterator().next();
         
