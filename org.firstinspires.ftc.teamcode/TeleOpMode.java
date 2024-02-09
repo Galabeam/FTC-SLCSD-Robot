@@ -26,6 +26,9 @@ public class TeleOpMode extends LinearOpMode {
 /*2*/   SidewaysWheel = hardwareMap.get(DcMotor.class,"SidewaysWheel");
 // Built-in
         VoltageSensor = hardwareMap.voltageSensor.iterator().next();
+        // Hardware properties
+        LeftWheel.setDirection(DcMotor.Direction.FORWARD);
+        RightWheel.setDirection(DcMotor.Direction.FORWARD);
         
         // Initialization
         waitForStart();
