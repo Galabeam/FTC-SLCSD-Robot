@@ -1,4 +1,8 @@
-# v1.5
+# v1.6
+
+*TeleOpMode.java*: WheelPower fixes
+
+## v1.5
 
 *CHANGELOG.md* addition, *README.md* and *TeleOpMode.java* updates
 
@@ -8,7 +12,7 @@
 
 ## v1.2 - v1.3
 
-*TeleOpMode.java*: SidewaysWheel
+*TeleOpMode.java*: SidewaysWheel addition
 
 ## v1.1
 

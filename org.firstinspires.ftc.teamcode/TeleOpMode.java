@@ -44,8 +44,8 @@ public class TeleOpMode extends LinearOpMode {
                 }
 
                 // Rear Wheels
-                float LeftWheelPower = gamepad1.left_stick_x + gamepad1.left_stick_y;
-                float RightWheelPower = gamepad1.left_stick_x + (gamepad1.left_stick_y * -1);
+                float LeftWheelPower = gamepad1.left_stick_x + (gamepad1.left_stick_y * -1);
+                float RightWheelPower = gamepad1.left_stick_x + gamepad1.left_stick_y;
                 float WheelPowerMax = Math.max(Math.abs(LeftWheelPower),Math.abs(RightWheelPower));
                 if (WheelPowerMax > 1.0) {
                     LeftWheelPower /= WheelPowerMax;
