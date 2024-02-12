@@ -14,8 +14,6 @@ public class TeleOpMode extends LinearOpMode {
 /*0*/   private DcMotor LeftWheel;
 /*1*/   private DcMotor RightWheel;
 /*2*/   private DcMotor SidewaysWheel;
-// Built-in
-        private VoltageSensor VoltageSensor;
 
     // Activation
     @Override
@@ -24,8 +22,6 @@ public class TeleOpMode extends LinearOpMode {
 /*0*/   LeftWheel =     hardwareMap.get(DcMotor.class,"LeftWheel");
 /*1*/   RightWheel =    hardwareMap.get(DcMotor.class,"RightWheel");
 /*2*/   SidewaysWheel = hardwareMap.get(DcMotor.class,"SidewaysWheel");
-// Built-in
-        VoltageSensor = hardwareMap.voltageSensor.iterator().next();
         // Hardware properties
         LeftWheel.setDirection(DcMotor.Direction.FORWARD);
         RightWheel.setDirection(DcMotor.Direction.FORWARD);
@@ -63,13 +59,9 @@ public class TeleOpMode extends LinearOpMode {
 
                 // Debug
                 if (Debug) {
-                    double Voltage = VoltageSensor.getVoltage();
-                    // Battery Percentage
-                    telemetry.addLine("Battery");
-                    telemetry.addData("- Percentage","%",((Voltage/15)*100));
-                    telemetry.addData("- Voltage","%",Voltage);
                     // Wheel Power
                     telemetry.addLine("Wheel Power - Debug");
+                    telemetry.addData("- Wheel Power Max","%",WheelPowerMax);
                     telemetry.addData("- Left Wheel Power","%",LeftWheelPower);
                     telemetry.addData("- Right Wheel Power","%",RightWheelPower);
                 }

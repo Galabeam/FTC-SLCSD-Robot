@@ -1,4 +1,8 @@
-# v1.6
+# v1.7
+
+*TeleOpMode.java*: WheelPowerMax debugv telemetry, VoltageSensor will be used at a later time.
+
+## v1.6
 
 *TeleOpMode.java*: WheelPower fixes
 
