@@ -1,6 +1,10 @@
-# v1.7
+# v1.7.1
 
-*TeleOpMode.java*: WheelPowerMax debugv telemetry, VoltageSensor will be used at a later time.
+*CHANGELOG.md*: I mis-input'd
+
+## v1.7
+
+*TeleOpMode.java*: WheelPowerMax debug telemetry, VoltageSensor will be used at a later time.
 
 ## v1.6
 
