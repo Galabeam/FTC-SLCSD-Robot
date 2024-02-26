@@ -1,4 +1,8 @@
-# v1.7.1
+# 1.8
+
+*TeleOpMode.java*: BlueClaw and ConeFlipper
+
+## v1.7.1
 
 *CHANGELOG.md*: I mis-input'd
 
