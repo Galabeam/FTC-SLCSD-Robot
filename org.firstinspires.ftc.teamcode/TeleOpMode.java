@@ -22,11 +22,11 @@ public class TeleOpMode extends LinearOpMode {
     @Override
     public void runOpMode() {
 // Motors
-/*0*/   LeftWheel = hardwareMap.get(DcMotor.class,"LeftWheel");
-/*1*/   RightWheel =hardwareMap.get(DcMotor.class,"RightWheel");
-/*2*/   ConeFlipper=hardwareMap.get(DcMotor.class,"ConeFlipper");
+/*0*/   LeftWheel   = hardwareMap.get(DcMotor.class,"LeftWheel");
+/*1*/   RightWheel  = hardwareMap.get(DcMotor.class,"RightWheel");
+/*2*/   ConeFlipper = hardwareMap.get(DcMotor.class,"ConeFlipper");
 // Servos
-/*0*/   BlueClaw =  hardwareMap.get(Servo.class,"BlueClaw");
+/*0*/   BlueClaw    = hardwareMap.get(Servo.class,"BlueClaw");
         // Hardware properties
         LeftWheel.setDirection(DcMotor.Direction.FORWARD);
         RightWheel.setDirection(DcMotor.Direction.FORWARD);

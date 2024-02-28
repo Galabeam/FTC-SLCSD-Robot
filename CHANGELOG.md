@@ -1,4 +1,8 @@
-# 1.8
+# 1.8.1
+
+*TeleOpMode.java*: Formatting
+
+## 1.8
 
 *TeleOpMode.java*: BlueClaw and ConeFlipper
 
