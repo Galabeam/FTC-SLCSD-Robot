@@ -16,7 +16,7 @@ public class TeleOpMode extends LinearOpMode {
 /*1*/   private DcMotor RightWheel;
 /*2*/   private DcMotor ConeFlipper;
 // Servos
-/*0*/   private Servo BlueClaw;
+/*5*/   private Servo BlueClaw;
 
     // Activation
     @Override

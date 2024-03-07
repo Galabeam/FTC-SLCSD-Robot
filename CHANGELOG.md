@@ -1,4 +1,8 @@
-# 1.8.1
+# 1.8.2
+
+*TeleOpMode.java*: BlueClaw - port 1 to port 5
+
+## 1.8.1
 
 *TeleOpMode.java*: Formatting
 
