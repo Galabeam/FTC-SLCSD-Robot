@@ -12,24 +12,30 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @TeleOp(name = "TeleOp")
 public class TeleOpMode extends LinearOpMode {
 // Motors
-/*0*/   private DcMotor LeftWheel;
-/*1*/   private DcMotor RightWheel;
-/*2*/   private DcMotor ConeFlipper;
+/*0*/   private DcMotor LeftFront;
+/*1*/   private DcMotor RightFront;
+/*2*/   private DcMotor LeftBack;
+/*3*/   private DcMotor RightBack;
+/*0*/   private DcMotor ConeFlipper;
 // Servos
-/*5*/   private Servo BlueClaw;
+/*5*/   private Servo BallClaw;
 
     // Activation
     @Override
     public void runOpMode() {
 // Motors
-/*0*/   LeftWheel   = hardwareMap.get(DcMotor.class,"LeftWheel");
-/*1*/   RightWheel  = hardwareMap.get(DcMotor.class,"RightWheel");
-/*2*/   ConeFlipper = hardwareMap.get(DcMotor.class,"ConeFlipper");
+/*0*/   LeftFront   = hardwareMap.get(DcMotor.class,"LeftFront");
+/*1*/   RightFront  = hardwareMap.get(DcMotor.class,"RightFront");
+/*2*/   LeftBack   = hardwareMap.get(DcMotor.class,"LeftBack");
+/*3*/   RightBack  = hardwareMap.get(DcMotor.class,"RightBack");
+/*0*/   //ConeFlipper = hardwareMap.get(DcMotor.class,"ConeFlipper");
 // Servos
-/*5*/   BlueClaw    = hardwareMap.get(Servo.class,"BlueClaw");
+/*5*/   BallClaw    = hardwareMap.get(Servo.class,"BallClaw");
         // Hardware properties
-        LeftWheel.setDirection(DcMotor.Direction.FORWARD);
-        RightWheel.setDirection(DcMotor.Direction.FORWARD);
+        LeftFront.setDirection(DcMotor.Direction.REVERSE);
+        RightFront.setDirection(DcMotor.Direction.FORWARD);
+        LeftBack.setDirection(DcMotor.Direction.REVERSE);
+        RightBack.setDirection(DcMotor.Direction.FORWARD);
         
         // Initialization
         waitForStart();
@@ -44,16 +50,32 @@ public class TeleOpMode extends LinearOpMode {
                     Debug = !Debug;
                 }
 
-                // Rear Wheels
-                float LeftWheelPower = gamepad1.left_stick_x + (gamepad1.left_stick_y * -1);
-                float RightWheelPower = gamepad1.left_stick_x + gamepad1.left_stick_y;
-                float WheelPowerMax = Math.max(Math.abs(LeftWheelPower),Math.abs(RightWheelPower));
+                // Wheels
+                double WheelPowerMax;
+                
+                double Axial    = -gamepad1.left_stick_y;
+                double Lateral  = gamepad1.left_stick_x;
+                double Yaw      = gamepad1.right_stick_x;
+                
+                double LeftFrontPower   = Axial + Lateral + Yaw;
+                double RightFrontPower  = Axial - Lateral - Yaw;
+                double LeftBackPower    = Axial - Lateral + Yaw;
+                double RightBackPower   = Axial + Lateral - Yaw;
+                
+                WheelPowerMax = Math.max(Math.abs(LeftFrontPower), Math.abs(RightFrontPower));
+                WheelPowerMax = Math.max(WheelPowerMax, Math.abs(LeftBackPower));
+                WheelPowerMax = Math.max(WheelPowerMax, Math.abs(RightBackPower));
+                
                 if (WheelPowerMax > 1.0) {
-                    LeftWheelPower /= WheelPowerMax;
-                    RightWheelPower /= WheelPowerMax;
+                    LeftFrontPower /= WheelPowerMax;
+                    RightFrontPower /= WheelPowerMax;
+                    LeftBackPower /= WheelPowerMax;
+                    RightBackPower /= WheelPowerMax;
                 }
-                LeftWheel.setPower(LeftWheelPower);
-                RightWheel.setPower(RightWheelPower);
+                LeftFront.setPower(LeftFrontPower);
+                RightFront.setPower(RightFrontPower);
+                LeftBack.setPower(LeftBackPower);
+                RightBack.setPower(RightBackPower);
 
                 /* Sideways Wheel
                 if (gamepad1.right_stick_x != 0) {
@@ -64,21 +86,25 @@ public class TeleOpMode extends LinearOpMode {
                 */
 
                 // Cone Flipper
-                ConeFlipper.setPower(gamepad1.right_stick_y);
+                //ConeFlipper.setPower(gamepad1.right_stick_y);
 
-                // Blue Claw
+                // Ball Claw
+                boolean Open = false;
                 if (gamepad1.x) {
-                    BlueClaw.setPosition(0.5);
-                } else if (BlueClaw.getPosition() != 0) {
-                    BlueClaw.setPosition(0);
+                    if (Open == false) {
+                        BallClaw.setPosition(0.5);
+                    } else if (Open == true) {
+                        BallClaw.setPosition(0);
+                    }
                 }
+                
                 // Debug
                 if (Debug) {
                     // Wheel Power
                     telemetry.addLine("Wheel Power - Debug");
                     telemetry.addData("- Wheel Power Max","%",WheelPowerMax);
-                    telemetry.addData("- Left Wheel Power","%",LeftWheelPower);
-                    telemetry.addData("- Right Wheel Power","%",RightWheelPower);
+                    //telemetry.addData("- Left Wheel Power","%",LeftWheelPower);
+                    //telemetry.addData("- Right Wheel Power","%",RightWheelPower);
                 }
             }
         }

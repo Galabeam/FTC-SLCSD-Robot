@@ -1,4 +1,8 @@
-# 1.8.2
+# 1.9
+
+*TeleOpMode.java*: Omni wheels, BlueClaw boolean
+
+## 1.8.2
 
 *TeleOpMode.java*: BlueClaw - port 1 to port 5
 
