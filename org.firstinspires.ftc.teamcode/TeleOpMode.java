@@ -11,26 +11,28 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "TeleOp")
 public class TeleOpMode extends LinearOpMode {
-// Motors
+// Motors - Control Hub
 /*0*/   private DcMotor LeftFront;
 /*1*/   private DcMotor RightFront;
 /*2*/   private DcMotor LeftBack;
 /*3*/   private DcMotor RightBack;
+// Motors - Expansion Hub
 /*0*/   private DcMotor ConeFlipper;
 // Servos
-/*5*/   private Servo BallClaw;
+/*0*/   private Servo BallClaw;
 
     // Activation
     @Override
     public void runOpMode() {
-// Motors
+// Motors - Control Hub
 /*0*/   LeftFront   = hardwareMap.get(DcMotor.class,"LeftFront");
 /*1*/   RightFront  = hardwareMap.get(DcMotor.class,"RightFront");
 /*2*/   LeftBack   = hardwareMap.get(DcMotor.class,"LeftBack");
 /*3*/   RightBack  = hardwareMap.get(DcMotor.class,"RightBack");
+// Motors - Expansion Hub
 /*0*/   //ConeFlipper = hardwareMap.get(DcMotor.class,"ConeFlipper");
 // Servos
-/*5*/   BallClaw    = hardwareMap.get(Servo.class,"BallClaw");
+/*0*/   BallClaw    = hardwareMap.get(Servo.class,"BallClaw");
         // Hardware properties
         LeftFront.setDirection(DcMotor.Direction.REVERSE);
         RightFront.setDirection(DcMotor.Direction.FORWARD);
@@ -76,14 +78,6 @@ public class TeleOpMode extends LinearOpMode {
                 RightFront.setPower(RightFrontPower);
                 LeftBack.setPower(LeftBackPower);
                 RightBack.setPower(RightBackPower);
-
-                /* Sideways Wheel
-                if (gamepad1.right_stick_x != 0) {
-                    SidewaysWheel.setPower(gamepad1.right_stick_x);
-                } else if (SidewaysWheel.getPower() != 0) {
-                    SidewaysWheel.setPower(0);
-                }
-                */
 
                 // Cone Flipper
                 //ConeFlipper.setPower(gamepad1.right_stick_y);
