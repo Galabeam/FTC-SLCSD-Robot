@@ -55,7 +55,7 @@ public class TeleOpMode extends LinearOpMode {
                 // Wheels
                 double WheelPowerMax;
                 
-                double Axial    = -gamepad1.left_stick_y;
+                double Axial    =-gamepad1.left_stick_y;
                 double Lateral  = gamepad1.left_stick_x;
                 double Yaw      = gamepad1.right_stick_x;
                 
@@ -69,10 +69,10 @@ public class TeleOpMode extends LinearOpMode {
                 WheelPowerMax = Math.max(WheelPowerMax, Math.abs(RightBackPower));
                 
                 if (WheelPowerMax > 1.0) {
-                    LeftFrontPower /= WheelPowerMax;
+                    LeftFrontPower  /= WheelPowerMax;
                     RightFrontPower /= WheelPowerMax;
-                    LeftBackPower /= WheelPowerMax;
-                    RightBackPower /= WheelPowerMax;
+                    LeftBackPower   /= WheelPowerMax;
+                    RightBackPower  /= WheelPowerMax;
                 }
                 LeftFront.setPower(LeftFrontPower);
                 RightFront.setPower(RightFrontPower);

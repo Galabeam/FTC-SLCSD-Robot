@@ -1,4 +1,8 @@
-# v1.9.2
+# v1.9.3
+
+*TeleOpMode.java*: Formatting, part 2
+
+## v1.9.2
 
 *CHANGELOG.md*: I jus realized there were no "v" labels
 
