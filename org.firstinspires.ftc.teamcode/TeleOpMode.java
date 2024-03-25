@@ -18,8 +18,6 @@ public class TeleOpMode extends LinearOpMode {
 /*3*/   private DcMotor RightBack;
 // Motors - Expansion Hub
 /*0*/   private DcMotor ConeFlipper;
-// Servos
-/*0*/   private Servo BallClaw;
 
     // Activation
     @Override
@@ -27,12 +25,10 @@ public class TeleOpMode extends LinearOpMode {
 // Motors - Control Hub
 /*0*/   LeftFront   = hardwareMap.get(DcMotor.class,"LeftFront");
 /*1*/   RightFront  = hardwareMap.get(DcMotor.class,"RightFront");
-/*2*/   LeftBack   = hardwareMap.get(DcMotor.class,"LeftBack");
-/*3*/   RightBack  = hardwareMap.get(DcMotor.class,"RightBack");
+/*2*/   LeftBack    = hardwareMap.get(DcMotor.class,"LeftBack");
+/*3*/   RightBack   = hardwareMap.get(DcMotor.class,"RightBack");
 // Motors - Expansion Hub
 /*0*/   //ConeFlipper = hardwareMap.get(DcMotor.class,"ConeFlipper");
-// Servos
-/*0*/   BallClaw    = hardwareMap.get(Servo.class,"BallClaw");
         // Hardware properties
         LeftFront.setDirection(DcMotor.Direction.REVERSE);
         RightFront.setDirection(DcMotor.Direction.FORWARD);
@@ -81,16 +77,6 @@ public class TeleOpMode extends LinearOpMode {
 
                 // Cone Flipper
                 //ConeFlipper.setPower(gamepad1.right_stick_y);
-
-                // Ball Claw
-                boolean Open = false;
-                if (gamepad1.x) {
-                    if (Open == false) {
-                        BallClaw.setPosition(0.5);
-                    } else if (Open == true) {
-                        BallClaw.setPosition(0);
-                    }
-                }
                 
                 // Debug
                 if (Debug) {
