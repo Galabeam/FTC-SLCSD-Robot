@@ -16,8 +16,6 @@ public class TeleOpMode extends LinearOpMode {
 /*1*/   private DcMotor RightFront;
 /*2*/   private DcMotor LeftBack;
 /*3*/   private DcMotor RightBack;
-// Motors - Expansion Hub
-/*0*/   private DcMotor ConeFlipper;
 
     // Activation
     @Override
@@ -27,8 +25,6 @@ public class TeleOpMode extends LinearOpMode {
 /*1*/   RightFront  = hardwareMap.get(DcMotor.class,"RightFront");
 /*2*/   LeftBack    = hardwareMap.get(DcMotor.class,"LeftBack");
 /*3*/   RightBack   = hardwareMap.get(DcMotor.class,"RightBack");
-// Motors - Expansion Hub
-/*0*/   //ConeFlipper = hardwareMap.get(DcMotor.class,"ConeFlipper");
         // Hardware properties
         LeftFront.setDirection(DcMotor.Direction.REVERSE);
         RightFront.setDirection(DcMotor.Direction.FORWARD);
@@ -46,6 +42,9 @@ public class TeleOpMode extends LinearOpMode {
                 boolean Debug = false;
                 if (gamepad1.guide) {
                     Debug = !Debug;
+                    while (gamepad1.guide) {
+                        sleep(1000)
+                    }
                 }
 
                 // Wheels
@@ -74,17 +73,16 @@ public class TeleOpMode extends LinearOpMode {
                 RightFront.setPower(RightFrontPower);
                 LeftBack.setPower(LeftBackPower);
                 RightBack.setPower(RightBackPower);
-
-                // Cone Flipper
-                //ConeFlipper.setPower(gamepad1.right_stick_y);
                 
                 // Debug
                 if (Debug) {
                     // Wheel Power
                     telemetry.addLine("Wheel Power - Debug");
                     telemetry.addData("- Wheel Power Max","%",WheelPowerMax);
-                    //telemetry.addData("- Left Wheel Power","%",LeftWheelPower);
-                    //telemetry.addData("- Right Wheel Power","%",RightWheelPower);
+                    telemetry.addData("- Left Front Wheel Power","%",LeftFrontPower);
+                    telemetry.addData("- Right Front Wheel Power","%",RightFrontPower);
+                    telemetry.addData("- Left Back Wheel Power","%",LeftBackPower);
+                    telemetry.addData("- Right Back Wheel Power","%",RightBackPower);
                 }
             }
         }

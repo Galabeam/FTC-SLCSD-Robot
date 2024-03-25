@@ -1,4 +1,8 @@
-# v2.0.0
+# v2.1.0
+
+*TeleOpMode.java*: Forgot to remove ConeFlipper, fixed debug mode
+
+## v2.0.0
 
 *TeleOpMode.java*: NEW GAME: 1st Annual Route 12 FTC Competition, gooderest omni wheels, BallClaw disappearance
 
