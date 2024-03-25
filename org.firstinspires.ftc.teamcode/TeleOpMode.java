@@ -43,7 +43,7 @@ public class TeleOpMode extends LinearOpMode {
                 if (gamepad1.guide) {
                     Debug = !Debug;
                     while (gamepad1.guide) {
-                        sleep(1000)
+                        sleep(1000);
                     }
                 }
 
