@@ -1,4 +1,8 @@
-# v2.1.2
+# v2.1.3
+
+*TeleOpMode.java*: Simplified the "Wheel Power - Debug" labels
+
+## v2.1.2
 
 *TeleOpMode.java*: %f
 
