@@ -78,11 +78,11 @@ public class TeleOpMode extends LinearOpMode {
                 if (Debug) {
                     // Wheel Power
                     telemetry.addLine("Wheel Power - Debug");
-                    telemetry.addData("- Max: ","%f",WheelPowerMax);
-                    telemetry.addData("> LF: ","%f",LeftFrontPower);
-                    telemetry.addData("> RF: ","%f",RightFrontPower);
-                    telemetry.addData("> LB: ","%f",LeftBackPower);
-                    telemetry.addData("> RB: ","%f",RightBackPower);
+                    telemetry.addData("- Max: ","%.1f",WheelPowerMax);
+                    telemetry.addData("> LF: ","%.1f",LeftFrontPower);
+                    telemetry.addData("> RF: ","%.1f",RightFrontPower);
+                    telemetry.addData("> LB: ","%.1f",LeftBackPower);
+                    telemetry.addData("> RB: ","%.1f",RightBackPower);
                 }
             }
         }
