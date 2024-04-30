@@ -16,6 +16,8 @@ public class TeleOpMode extends LinearOpMode {
 /*1*/   private DcMotor RightFront;
 /*2*/   private DcMotor LeftBack;
 /*3*/   private DcMotor RightBack;
+// Motors - Expansion Hub
+/*0*/   private DcMotor ConeFlipper;
 
     // Activation
     @Override
@@ -25,11 +27,14 @@ public class TeleOpMode extends LinearOpMode {
 /*1*/   RightFront  = hardwareMap.get(DcMotor.class,"RightFront");
 /*2*/   LeftBack    = hardwareMap.get(DcMotor.class,"LeftBack");
 /*3*/   RightBack   = hardwareMap.get(DcMotor.class,"RightBack");
+// Motors - Expansion Hub
+/*0*/   ConeFlipper = hardwareMap.get(DcMotor.class,"ConeFlipper");
         // Hardware properties
         LeftFront.setDirection(DcMotor.Direction.REVERSE);
         RightFront.setDirection(DcMotor.Direction.FORWARD);
         LeftBack.setDirection(DcMotor.Direction.REVERSE);
         RightBack.setDirection(DcMotor.Direction.FORWARD);
+        ConeFlipper.setDirection(DcMotor.Direction.FORWARD);
         
         // Initialization
         waitForStart();
@@ -38,7 +43,7 @@ public class TeleOpMode extends LinearOpMode {
             while (opModeIsActive()) {
                 // Loop
                 telemetry.update();
-                // Variables
+                // Variables5
                 boolean Debug = false;
                 if (gamepad1.guide) {
                     Debug = !Debug;
@@ -73,6 +78,16 @@ public class TeleOpMode extends LinearOpMode {
                 RightFront.setPower(RightFrontPower);
                 LeftBack.setPower(LeftBackPower);
                 RightBack.setPower(RightBackPower);
+
+
+                // Cone Flipper
+                if (gamepad1.dpad_up) {
+                    ConeFlipper.setPower(-1);
+                } else if (gamepad1.dpad_down) {
+                    ConeFlipper.setPower(1);
+                } else {
+                    ConeFlipper.setPower(0);
+                }
                 
                 // Debug
                 if (Debug) {
