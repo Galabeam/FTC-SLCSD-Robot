@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name = "Autonomous")
+@Autonomous(name = "AutonomousMode")
 public class AutonomousMode extends LinearOpMode {
 // Motors - Control Hub
 /*0*/   private DcMotor LeftFront;
@@ -14,33 +14,16 @@ public class AutonomousMode extends LinearOpMode {
 // Motors - Expansion Hub
 /*0*/   private DcMotor ConeFlipper;
 
-    // Activation
-    @Override
-    public void runOpMode() {
-// Motors - Control Hub
-/*0*/   LeftFront   = hardwareMap.get(DcMotor.class,"LeftFront");
-/*1*/   RightFront  = hardwareMap.get(DcMotor.class,"RightFront");
-/*2*/   LeftBack    = hardwareMap.get(DcMotor.class,"LeftBack");
-/*3*/   RightBack   = hardwareMap.get(DcMotor.class,"RightBack");
-// Motors - Expansion Hub
-/*0*/   ConeFlipper = hardwareMap.get(DcMotor.class,"ConeFlipper");
-        // Hardware properties
-        LeftFront.setDirection(DcMotor.Direction.REVERSE);
-        RightFront.setDirection(DcMotor.Direction.FORWARD);
-        LeftBack.setDirection(DcMotor.Direction.REVERSE);
-        RightBack.setDirection(DcMotor.Direction.FORWARD);
-        ConeFlipper.setDirection(DcMotor.Direction.FORWARD);
-        
         // Hold
         private void Hold(int Seconds) {
-            sleep(Seconds * 1000)
+            sleep(Seconds * 1000);
         }
 
         // Wheels
         private void Wheels(double Axial, double Lateral, double Yaw) {
             double WheelPowerMax;
                 
-            double Axial=-Axial;
+            Axial=-Axial;
             // Axial = left_stick_y / move forward-backward
             // Lateral = left_stick_x / move left-right
             // Yaw = right_stick_x / turn left-right
@@ -65,6 +48,23 @@ public class AutonomousMode extends LinearOpMode {
             LeftBack.setPower(LeftBackPower);
             RightBack.setPower(RightBackPower);
         }
+
+    // Activation
+    @Override
+    public void runOpMode() {
+// Motors - Control Hub
+/*0*/   LeftFront   = hardwareMap.get(DcMotor.class,"LeftFront");
+/*1*/   RightFront  = hardwareMap.get(DcMotor.class,"RightFront");
+/*2*/   LeftBack    = hardwareMap.get(DcMotor.class,"LeftBack");
+/*3*/   RightBack   = hardwareMap.get(DcMotor.class,"RightBack");
+// Motors - Expansion Hub
+/*0*/   ConeFlipper = hardwareMap.get(DcMotor.class,"ConeFlipper");
+        // Hardware properties
+        LeftFront.setDirection(DcMotor.Direction.REVERSE);
+        RightFront.setDirection(DcMotor.Direction.FORWARD);
+        LeftBack.setDirection(DcMotor.Direction.REVERSE);
+        RightBack.setDirection(DcMotor.Direction.FORWARD);
+        ConeFlipper.setDirection(DcMotor.Direction.FORWARD);
 
         // Initialization Code
         waitForStart();
