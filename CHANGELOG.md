@@ -1,4 +1,8 @@
-# v2.4.0
+# v2.5.0
+
+*TeleOpMode.java*: PixelClaw
+
+## v2.4.0
 
 *AutonomousMode.java*: But it actually works, however our wheel snapped magically.
 
