@@ -1,4 +1,8 @@
-# v2.5.0
+# v2.6.0
+
+*TeleOpMode.java*: Labels and ConeFlipper is now at half speed.
+
+## v2.5.0
 
 *TeleOpMode.java*: PixelClaw
 

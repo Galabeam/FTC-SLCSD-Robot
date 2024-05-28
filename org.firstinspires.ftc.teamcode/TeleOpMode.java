@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "TeleOp")
@@ -86,18 +88,20 @@ public class TeleOpMode extends LinearOpMode {
 
                 // Cone Flipper
                 if (gamepad1.dpad_up) {
-                    ConeFlipper.setPower(-1);
+                    ConeFlipper.setPower(-0.5);
                 } else if (gamepad1.dpad_down) {
-                    ConeFlipper.setPower(1);
+                    ConeFlipper.setPower(0.5);
                 } else {
                     ConeFlipper.setPower(0);
                 }
                 
                 // Pixel Claw
                 if (gamepad1.dpad_left) {
+                    // outward
                     PixelClaw_L.setPosition(0.9);
                     PixelClaw_R.setPosition(0.6);
                 } else if (gamepad1.dpad_right) {
+                    // inward
                     PixelClaw_L.setPosition(0.775);
                     PixelClaw_R.setPosition(0.75);
                 } 
