@@ -86,7 +86,7 @@ public class TeleOpMode extends LinearOpMode {
                 RightBack.setPower(RightBackPower);
 
                 // Pixel Flipper
-                PixelFlipper.setPower(Range.clip(gamepad1.right_trigger + gamepad1.left_trigger -1.0, 1.0));
+                PixelFlipper.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
                 
                 // Pixel Claw
                 if (gamepad1.dpad_left) {
