@@ -1,16 +1,20 @@
-# v2.7.0
+# v2.4.3
+
+*CHANGELOG.md*: These version numbers make no sense, pretend the other ones didn't exist (I literally skipped I version on accident)
+
+## v2.4.2
 
 *TeleOpMode.java*: ConeFlipper = PixelFlipper, changed PixelFlipper to be controlled with triggers
 
-## v2.6.0
+## v2.4.1
 
 *TeleOpMode.java*: Labels and ConeFlipper is now at half speed.
 
-## v2.5.0
+## v2.4.0
 
 *TeleOpMode.java*: PixelClaw
 
-## v2.4.0
+## v2.3.1
 
 *AutonomousMode.java*: But it actually works, however our wheel snapped magically.
 
