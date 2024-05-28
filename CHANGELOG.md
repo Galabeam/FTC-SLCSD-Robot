@@ -1,6 +1,6 @@
 # v2.4.3
 
-*CHANGELOG.md*: These version numbers make no sense, pretend the other ones didn't exist (I literally skipped I version on accident)
+*CHANGELOG.md*: These version numbers make no sense, pretend the other ones didn't exist (I literally skipped a version on accident)
 
 ## v2.4.2
 
