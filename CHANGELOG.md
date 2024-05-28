@@ -1,4 +1,8 @@
-# v2.6.0
+# v2.7.0
+
+*TeleOpMode.java*: ConeFlipper = PixelFlipper, changed PixelFlipper to be controlled with triggers
+
+## v2.6.0
 
 *TeleOpMode.java*: Labels and ConeFlipper is now at half speed.
 

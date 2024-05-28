@@ -20,7 +20,7 @@ public class TeleOpMode extends LinearOpMode {
 /*4*/   private Servo PixelClaw_R;
 /*5*/   private Servo PixelClaw_L;
 // Motors - Expansion Hub
-/*0*/   private DcMotor ConeFlipper;
+/*0*/   private DcMotor PixelFlipper;
 
     // Activation
     @Override
@@ -34,13 +34,13 @@ public class TeleOpMode extends LinearOpMode {
 /*4*/   PixelClaw_R = hardwareMap.get(Servo.class,"PixelClaw_R");
 /*5*/   PixelClaw_L = hardwareMap.get(Servo.class,"PixelClaw_L");
 // Motors - Expansion Hub
-/*0*/   ConeFlipper = hardwareMap.get(DcMotor.class,"ConeFlipper");
+/*0*/   PixelFlipper = hardwareMap.get(DcMotor.class,"PixelFlipper");
         // Hardware properties
         LeftFront.setDirection(DcMotor.Direction.REVERSE);
         RightFront.setDirection(DcMotor.Direction.FORWARD);
         LeftBack.setDirection(DcMotor.Direction.REVERSE);
         RightBack.setDirection(DcMotor.Direction.FORWARD);
-        ConeFlipper.setDirection(DcMotor.Direction.FORWARD);
+        PixelFlipper.setDirection(DcMotor.Direction.FORWARD);
         
         // Initialization
         waitForStart();
@@ -85,15 +85,8 @@ public class TeleOpMode extends LinearOpMode {
                 LeftBack.setPower(LeftBackPower);
                 RightBack.setPower(RightBackPower);
 
-
-                // Cone Flipper
-                if (gamepad1.dpad_up) {
-                    ConeFlipper.setPower(-0.5);
-                } else if (gamepad1.dpad_down) {
-                    ConeFlipper.setPower(0.5);
-                } else {
-                    ConeFlipper.setPower(0);
-                }
+                // Pixel Flipper
+                PixelFlipper.setPower(Range.clip(gamepad1.right_trigger + gamepad1.left_trigger -1.0, 1.0));
                 
                 // Pixel Claw
                 if (gamepad1.dpad_left) {
