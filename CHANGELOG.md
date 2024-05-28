@@ -1,4 +1,8 @@
-# v2.4.3
+# v2.4.4
+
+*AutonomousMode.java*: Support, and 3
+
+## v2.4.3
 
 *CHANGELOG.md*: These version numbers make no sense, pretend the other ones didn't exist (I literally skipped a version on accident)
 

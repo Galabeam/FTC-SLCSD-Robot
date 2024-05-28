@@ -70,8 +70,12 @@ public class AutonomousMode extends LinearOpMode {
         waitForStart();
         if (opModeIsActive()) {
             // Run Code
+
+            // Axial = left_stick_y / move forward-backward
+            // Lateral = left_stick_x / move left-right
+            // Yaw = right_stick_x / turn left-right
             telemetry.update();
-            Wheels(1,0,0);
+            Wheels(3,0,0);
             Hold(2);
             Wheels(0,0,0);
         }
