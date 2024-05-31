@@ -57,13 +57,13 @@ public class AutonomousMode extends LinearOpMode {
 /*2*/   LeftBack    = hardwareMap.get(DcMotor.class,"LeftBack");
 /*3*/   RightBack   = hardwareMap.get(DcMotor.class,"RightBack");
 // Motors - Expansion Hub
-/*0*/   ConeFlipper = hardwareMap.get(DcMotor.class,"ConeFlipper");
+/*0*/   PixelFlipper = hardwareMap.get(DcMotor.class,"PixelFlipper");
         // Hardware properties
         LeftFront.setDirection(DcMotor.Direction.REVERSE);
         RightFront.setDirection(DcMotor.Direction.FORWARD);
         LeftBack.setDirection(DcMotor.Direction.REVERSE);
         RightBack.setDirection(DcMotor.Direction.FORWARD);
-        ConeFlipper.setDirection(DcMotor.Direction.FORWARD);
+        PixelFlipper.setDirection(DcMotor.Direction.FORWARD);
 
         // Initialization Code
         waitForStart();

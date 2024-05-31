@@ -1,4 +1,8 @@
-# v2.4.5
+# v2.4.6
+
+*AutonomousMode.java*: ConeFlipper = PixelFlipper
+
+## v2.4.5
 
 *AutonomousMode.java*: Fixed speed
 *TeleOpMode.java*: Range.clip no behave
