@@ -12,7 +12,7 @@ public class AutonomousMode extends LinearOpMode {
 /*2*/   private DcMotor LeftBack;
 /*3*/   private DcMotor RightBack;
 // Motors - Expansion Hub
-/*0*/   private DcMotor ConeFlipper;
+/*0*/   private DcMotor PixelFlipper;
 
         // Hold
         private void Hold(int Seconds) {

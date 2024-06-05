@@ -1,4 +1,8 @@
-# v2.4.6
+# v2.4.7
+
+*AutonomousMode.java*: ConeFlipper variable initializer = PixelFlipper
+
+## v2.4.6
 
 *AutonomousMode.java*: ConeFlipper = PixelFlipper
 
