@@ -1,4 +1,8 @@
-# v2.4.7
+# v2.5.0
+
+This season is now over as of 6/13/24 (last day of school). This year was great for both games, I can't wait for next year.
+
+## v2.4.7
 
 *AutonomousMode.java*: ConeFlipper variable initializer = PixelFlipper
 
