@@ -5,7 +5,11 @@ The other teams are H2rOboFalcons and Aluminium Falcons (there is too many kids 
 
 ## CHANGELOG
 
-## v1.0.2 | 13/09/24
+## v1.1.0 | 17/09/24
+
+We're now building the robot controller app!
+
+### v1.0.2 | 13/09/24
 
 Merged *CHANGELOG.md* with *README.md* because it doesn't show in the box with the things.
 
