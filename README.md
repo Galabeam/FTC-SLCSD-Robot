@@ -5,7 +5,12 @@ The other teams are H2rOboFalcons and Aluminium Falcons (there is too many kids 
 
 ## CHANGELOG
 
-## v1.1.0 | 17/09/24
+## v1.1.1 | 17/09/24
+
+*TeleOpMode.java*: TestMotor is real, and is controlled by the left stick's Y position.
+I do not care for autonomous right now.
+
+### v1.1.0 | 17/09/24
 
 We're now building the robot controller app!
 
