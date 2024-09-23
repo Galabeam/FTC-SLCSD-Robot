@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.LED;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 @TeleOp(name = "TeleOpMode")
@@ -13,10 +12,8 @@ public class TeleOpMode extends LinearOpMode {
     /*1*/   private DcMotor RightFront;
     /*2*/   private DcMotor LeftBack;
     /*3*/   private DcMotor RightBack;
-    // Digital Devices - Control Hub
-    /*0*/   private LED LED;
 
-    // Activation
+    //                                                                                                                                                      
     @Override
     public void runOpMode() {
         // Motors - Control Hub
@@ -24,14 +21,15 @@ public class TeleOpMode extends LinearOpMode {
         /*1*/   RightFront = hardwareMap.get(DcMotor.class,"RightFront");
         /*2*/   LeftBack = hardwareMap.get(DcMotor.class,"LeftBack");
         /*3*/   RightBack = hardwareMap.get(DcMotor.class,"RightBack");
-        // Digital Devices - Control Hub
-        /*0*/   LED = hardwareMap.get(LED.class,"LED");
 
         // Hardware properties
         LeftFront.setDirection(DcMotor.Direction.REVERSE);
         RightFront.setDirection(DcMotor.Direction.FORWARD);
         LeftBack.setDirection(DcMotor.Direction.REVERSE);
         RightBack.setDirection(DcMotor.Direction.FORWARD);
+
+        telemetry.addData("Status","I didn't blow up");
+        telemetry.update();
 
         // Initialization
         waitForStart();
@@ -40,10 +38,8 @@ public class TeleOpMode extends LinearOpMode {
             while (opModeIsActive()) {
                 // Loop
 
+                telemetry.addData("Status","I didn't blow up part 2");
                 telemetry.update();
-
-                // LED
-                LED.enable(true);
 
                 // Wheels
                 double WheelPowerMax;
