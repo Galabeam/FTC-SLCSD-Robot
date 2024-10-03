@@ -13,7 +13,7 @@ public class TeleOpMode extends LinearOpMode {
     /*2*/   private DcMotor LeftBack;
     /*3*/   private DcMotor RightBack;
     // Motors - Expansion Hub
-    /*0*/   private DcMotor LifterBelt;
+    /*0*/   private DcMotor ViperSlide;
 
     //                                                                                                                                                      
     @Override
@@ -24,7 +24,7 @@ public class TeleOpMode extends LinearOpMode {
         /*2*/   LeftBack = hardwareMap.get(DcMotor.class,"LeftBack");
         /*3*/   RightBack = hardwareMap.get(DcMotor.class,"RightBack");
         // Motors - Expansion Hub
-        /*0*/   LifterBelt = hardwareMap.get(DcMotor.class,"LifterBelt");
+        /*0*/   ViperSlide = hardwareMap.get(DcMotor.class,"ViperSlide");
 
         // Hardware properties
         LeftFront.setDirection(DcMotor.Direction.REVERSE);
@@ -78,8 +78,8 @@ public class TeleOpMode extends LinearOpMode {
                 LeftBack.setPower(LeftBackPower);
                 RightBack.setPower(RightBackPower);
 
-                // Lifter Belt & Spinner
-                LifterBelt.setPower(((gamepad1.left_bumper ? 1 : 0) + ((gamepad1.right_bumper ? 1 : 0) * -1)) * 0.4);
+                // Viper Slide
+                ViperSlide.setPower(((gamepad1.left_bumper ? 1 : 0) + ((gamepad1.right_bumper ? 1 : 0) * -1)) * 0.4);
             }
         }
     }

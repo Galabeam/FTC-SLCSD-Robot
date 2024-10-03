@@ -5,11 +5,15 @@ The other teams are H2rOboFalcons and Aluminium Falcons (there is too many kids 
 
 ## CHANGELOG
 
-## v1.1.3 | 2024/10/02
+## v1.1.4 | 2024|10/03
+
+*TeleOpMode.java*: The Great Viper Slide (I originally forgot what it was called).
+
+### v1.1.3 | 2024/10/02
 
 *TeleOpMode.java*: The Great Lifter Belt
 
-## v1.1.2 | 2024/09/23
+### v1.1.2 | 2024/09/23
 
 *TeleOpMode.java*: Helpful telemetry and the LED was for testing.
 Also the date format is now the universal one.
