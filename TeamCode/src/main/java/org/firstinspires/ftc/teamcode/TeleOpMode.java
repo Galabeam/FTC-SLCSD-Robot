@@ -28,14 +28,9 @@ public class TeleOpMode extends LinearOpMode {
 
         // Hardware properties
         LeftFront.setDirection(DcMotor.Direction.REVERSE);
-        LeftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RightFront.setDirection(DcMotor.Direction.FORWARD);
-        RightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LeftBack.setDirection(DcMotor.Direction.REVERSE);
-        LeftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RightBack.setDirection(DcMotor.Direction.FORWARD);
-        RightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
         LifterBelt.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         telemetry.addData("Status","I didn't blow up");
