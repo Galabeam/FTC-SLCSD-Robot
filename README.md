@@ -5,12 +5,12 @@ The other teams are H2rOboFalcons and Aluminium Falcons (there is too many kids 
 
 ## CHANGELOG
 
-### v1.1.5 | 2024|10/03
+### v1.1.5 | 2024/10/03
 
 *TeleOpMode.java*: The Great Viper Slide part 2, forgot to remove all the references.
 There's a problem where the robot voltage goes all the way down to around 8V when it's moving, I think it's the zero power behaviour, we tried a different battery, removing the switch, removing the expansion hub, but it didn't make a difference, so I'm not sure. I'm also tired of making the newest version a heading 2.
 
-### v1.1.4 | 2024|10/03
+### v1.1.4 | 2024/10/03
 
 *TeleOpMode.java*: The Great Viper Slide (I originally forgot what it was called).
 
