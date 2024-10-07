@@ -31,7 +31,7 @@ public class TeleOpMode extends LinearOpMode {
         RightFront.setDirection(DcMotor.Direction.FORWARD);
         LeftBack.setDirection(DcMotor.Direction.REVERSE);
         RightBack.setDirection(DcMotor.Direction.FORWARD);
-        LifterBelt.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        ViperSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         telemetry.addData("Status","I didn't blow up");
         telemetry.update();

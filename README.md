@@ -5,6 +5,10 @@ The other teams are H2rOboFalcons and Aluminium Falcons (there is too many kids 
 
 ## CHANGELOG
 
+### v1.1.6 | 2024/10/07
+
+*TeleOpMode.java*: The Great Viper Slide part 3, forgot to remove all the references part 2.
+
 ### v1.1.5 | 2024/10/03
 
 *TeleOpMode.java*: The Great Viper Slide part 2, forgot to remove all the references.
